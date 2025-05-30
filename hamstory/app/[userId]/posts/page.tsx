@@ -1,3 +1,8 @@
+type PostType = {
+  id: number;
+  title: string;
+};
+
 export default async function PostListPage() {
   const res = await fetch("http://localhost:3000/api", {
     method: "GET",
@@ -8,7 +13,13 @@ export default async function PostListPage() {
   });
   const data = await res.json();
 
-  console.log(data);
+  const posts: PostType[] = data.posts;
 
-  return <div>Post List Page.</div>;
+  return (
+    <div>
+      {posts.map((post: PostType) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </div>
+  );
 }

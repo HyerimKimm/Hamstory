@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   return NextResponse.json({
-    message: "Hello from App Router API",
+    posts: [{ id: 1, title: "첫 번째 포스트" }],
   });
 }
 
