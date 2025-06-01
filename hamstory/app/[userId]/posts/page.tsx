@@ -4,7 +4,7 @@ type PostType = {
 };
 
 export default async function PostListPage() {
-  const res = await fetch("http://localhost:3000/api", {
+  const res = await fetch("http://localhost:3000/api/1/posts", {
     method: "GET",
     headers: {
       "X-ID": "test",
