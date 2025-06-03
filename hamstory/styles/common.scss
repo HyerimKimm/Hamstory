@@ -2,14 +2,14 @@
 @use "variables";
 @use "mixin";
 
-* {
-  @include mixin.font(
-    variables.$fn,
-    normal,
-    variables.$black,
-    variables.$defaultFont
-  );
-  color: variables.$grey08;
+body.light {
+  background-color: white;
+  color: #000;
+}
+
+body.dark {
+  background-color: #000;
+  color: #fff;
 }
 
 h1 {
