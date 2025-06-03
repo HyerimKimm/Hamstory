@@ -1,0 +1,20 @@
+@mixin font($s, $w: normal, $c: null, $f: null) {
+  color: $c;
+  font-family: $f;
+  font-size: $s;
+  font-weight: $w;
+}
+
+@mixin size($w, $h) {
+  width: $w;
+  height: $h;
+}
+
+@mixin flex($d, $j, $a, $g, $fg) {
+  display: flex;
+  flex-direction: $d;
+  justify-content: $j;
+  align-items: $a;
+  gap: $g;
+  flex-grow: $fg;
+}

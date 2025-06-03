@@ -1,0 +1,74 @@
+:root {
+  --color_brand01_light: #ffc5a5;
+  --color_brand01: #fe7e37;
+  --color_brand02: #ee493d;
+  --color_brand_bg: #ffe9df;
+
+  --color_white: #fff;
+  --color_grey01: #fdfdfd;
+  --color_grey02: #f7f8f9;
+  --color_grey03: #e9ebee;
+  --color_grey04: #c5c8ce;
+  --color_grey05: #646f7c;
+  --color_grey06: #374553;
+  --color_grey07: #28323c;
+  --color_grey08: #161d24;
+  --color_black: #000;
+  --color_green01: #60b86f;
+  --color_red01: #f74271;
+  --color_red02: #ff0000;
+  --color_blue01: #1e3bf8;
+  --color_backdrop: rgba(0, 0, 0, 0.15);
+
+  --fs_h1: 28px;
+  --fs_h2: 25px;
+  --fs_h3: 22px;
+
+  --fs_xl: 19px;
+  --fs_l: 16px;
+  --fs_n: 14px;
+  --fs_s: 12px;
+}
+
+$defaultFont: "Pretendard", sans-serif;
+
+$brand01Light: var(--color_brand01_light);
+$brand01: var(--color_brand01);
+$brand02: var(--color_brand02);
+$brandBg: var(--color_brand_bg);
+$brandGradient: linear-gradient(
+  180deg,
+  transparent 50%,
+  var(--color_brand01_light)
+);
+
+$white: var(--color_white);
+$grey01: var(--color_grey01);
+$grey02: var(--color_grey02);
+$grey03: var(--color_grey03);
+$grey04: var(--color_grey04);
+$grey05: var(--color_grey05);
+$grey06: var(--color_grey06);
+$grey07: var(--color_grey07);
+$grey08: var(--color_grey08);
+$black: var(--color_black);
+$backdrop: var(--color_backdrop);
+
+$green01: var(--color_green01);
+$red01: var(--color_red01);
+$red02: var(--color_red02);
+$blue01: var(--color_blue01);
+
+$fh1: var(--fs_h1);
+$fh2: var(--fs_h2);
+$fh3: var(--fs_h3);
+$fxl: var(--fs_xl);
+$fl: var(--fs_l);
+$fn: var(--fs_n);
+$fs: var(--fs_s);
+
+$zi0: 0;
+$zi1: 1;
+$zi2: 2;
+$ziModal: 10;
+$ziLoading: 20;

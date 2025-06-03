@@ -1,0 +1,67 @@
+@use "reset";
+@use "variables";
+@use "mixin";
+
+* {
+  @include mixin.font(
+    variables.$fn,
+    normal,
+    variables.$black,
+    variables.$defaultFont
+  );
+  color: variables.$grey08;
+}
+
+h1 {
+  font-size: variables.$fh1;
+  font-weight: 600;
+
+  * {
+    font-size: variables.$fh1;
+    font-weight: 600;
+  }
+}
+
+h2 {
+  font-size: variables.$fh2;
+  font-weight: 600;
+
+  * {
+    font-size: variables.$fh2;
+    font-weight: 600;
+  }
+}
+
+h3 {
+  font-size: variables.$fh3;
+  font-weight: 500;
+
+  * {
+    font-size: variables.$fh3;
+    font-weight: 600;
+  }
+}
+
+h4 {
+  font-size: variables.$fxl;
+  font-weight: 500;
+
+  * {
+    font-size: variables.$fxl;
+    font-weight: 600;
+  }
+}
+
+h5 {
+  font-size: variables.$fl;
+  font-weight: 500;
+
+  * {
+    font-size: variables.$fl;
+    font-weight: 600;
+  }
+}
+
+strong {
+  color: variables.$brand01;
+}
