@@ -5,6 +5,8 @@
 html,
 body {
   font-family: variables.$defaultFont;
+  width: 100vw;
+  height: 100vh;
 }
 
 body.light {

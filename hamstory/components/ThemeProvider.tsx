@@ -3,7 +3,7 @@
 import localFont from "next/font/local";
 import { Oxanium } from "next/font/google";
 
-import "@/styles/common.scss";
+import "@/styles/globals.scss";
 
 import { uiStore } from "@/stores/uiStore";
 

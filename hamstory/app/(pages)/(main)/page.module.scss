@@ -1,0 +1,9 @@
+@use "variables";
+@use "mixin";
+
+.header_title {
+  font-family: variables.$logoFont;
+  > .brand {
+    color: variables.$brand01;
+  }
+}
