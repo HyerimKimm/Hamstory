@@ -1,6 +1,7 @@
 "use client";
 
 import localFont from "next/font/local";
+import { Oxanium } from "next/font/google";
 
 import "@/styles/common.scss";
 
@@ -32,6 +33,12 @@ const pretendard = localFont({
   variable: "--font-pretendard",
 });
 
+const oxanium = Oxanium({
+  subsets: ["latin"], // 또는 ['latin-ext', 'devanagari'] 등 필요에 따라
+  weight: ["400", "500", "600", "700"], // 사용할 굵기
+  display: "swap", // FOUT 방지 옵션
+});
+
 export default function ThemeProvider({
   children,
 }: {
@@ -42,9 +49,11 @@ export default function ThemeProvider({
   return (
     <html>
       <body
-        className={`${theme === "DARK" ? "dark" : "light"} ${
-          pretendard.variable
-        }`}
+        className={`
+          ${theme === "DARK" ? "dark" : "light"} 
+          ${pretendard.variable}
+          ${oxanium.className}
+        `}
       >
         {children}
       </body>

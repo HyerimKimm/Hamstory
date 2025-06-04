@@ -8,13 +8,13 @@ body {
 }
 
 body.light {
-  background-color: white;
-  color: #000;
+  background-color: variables.$white;
+  color: variables.$grey08;
 }
 
 body.dark {
-  background-color: #000;
-  color: #fff;
+  background-color: variables.$grey08;
+  color: variables.$white;
 }
 
 h1 {
