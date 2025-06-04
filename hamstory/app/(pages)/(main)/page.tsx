@@ -1,7 +1,10 @@
-import Link from "next/link";
-import styles from "./page.module.scss";
 import Image from "next/image";
+import Link from "next/link";
+
 import logo from "@/assets/images/logos/logo.svg";
+
+import styles from "./page.module.scss";
+
 export default function MainPage() {
   return (
     <header className={styles.header}>

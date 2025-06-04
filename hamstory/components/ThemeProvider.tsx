@@ -1,11 +1,11 @@
 "use client";
 
-import localFont from "next/font/local";
 import { Oxanium } from "next/font/google";
-
-import "@/styles/globals.scss";
+import localFont from "next/font/local";
 
 import { uiStore } from "@/stores/uiStore";
+
+import "@/styles/globals.scss";
 
 const pretendard = localFont({
   src: [
