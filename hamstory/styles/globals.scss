@@ -12,11 +12,18 @@ body {
 body.light {
   background-color: variables.$white;
   color: variables.$grey08;
+
+  * :focus-visible {
+    outline: 1px solid variables.$grey04;
+  }
 }
 
 body.dark {
   background-color: variables.$grey08;
   color: variables.$white;
+  * :focus-visible {
+    outline: 2px solid variables.$grey06;
+  }
 }
 
 h1 {
