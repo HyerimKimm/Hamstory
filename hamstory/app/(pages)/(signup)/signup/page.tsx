@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-export default function Home() {
+export default function SignUpPage() {
   const nicknameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
