@@ -2,6 +2,11 @@
 @use "variables";
 @use "mixin";
 
+html,
+body {
+  font-family: variables.$defaultFont;
+}
+
 body.light {
   background-color: white;
   color: #000;
