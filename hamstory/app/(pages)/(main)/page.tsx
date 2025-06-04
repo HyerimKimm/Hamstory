@@ -1,12 +1,22 @@
+import Link from "next/link";
 import styles from "./page.module.scss";
-
+import Image from "next/image";
+import logo from "@/assets/images/logos/logo.svg";
 export default function MainPage() {
   return (
-    <header>
-      <h3 className={styles.header_title}>
-        <span className={styles.brand}>H</span>amstory
-      </h3>
-      Root Page
+    <header className={styles.header}>
+      <Link href="/" className={styles.header_logo}>
+        <h3 className={styles.header_title}>
+          <Image
+            src={logo}
+            alt="Hamstory Logo"
+            width={45}
+            priority
+            className={styles.header_logo_img}
+          />
+          <span className={styles.brand}>H</span>amstory
+        </h3>
+      </Link>
     </header>
   );
 }
