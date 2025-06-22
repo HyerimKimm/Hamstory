@@ -2,7 +2,7 @@
 @use "mixin";
 
 .header {
-  @include mixin.flex(row, flex-start, center, null, null);
+  @include mixin.flex(row, space-between, center, null, null);
   width: 100%;
   height: 60px;
   padding: 0 20px;
