@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import ThemeProvider from "@/components/ThemeProvider";
+import ThemeProvider from "@/components/provider/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Hamstory",

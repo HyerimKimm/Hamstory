@@ -10,23 +10,23 @@ import "@/styles/globals.scss";
 const pretendard = localFont({
   src: [
     {
-      path: "../assets/fonts/pretendard/Pretendard-Light.woff",
+      path: "../../assets/fonts/pretendard/Pretendard-Light.woff",
       weight: "300",
     },
     {
-      path: "../assets/fonts/pretendard/Pretendard-Normal.woff",
+      path: "../../assets/fonts/pretendard/Pretendard-Normal.woff",
       weight: "400",
     },
     {
-      path: "../assets/fonts/pretendard/Pretendard-SemiBold.woff",
+      path: "../../assets/fonts/pretendard/Pretendard-SemiBold.woff",
       weight: "500",
     },
     {
-      path: "../assets/fonts/pretendard/Pretendard-Bold.woff",
+      path: "../../assets/fonts/pretendard/Pretendard-Bold.woff",
       weight: "600",
     },
     {
-      path: "../assets/fonts/pretendard/Pretendard-ExtraBold.woff",
+      path: "../../assets/fonts/pretendard/Pretendard-ExtraBold.woff",
       weight: "700",
     },
   ],

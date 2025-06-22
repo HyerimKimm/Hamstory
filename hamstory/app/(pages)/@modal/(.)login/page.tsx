@@ -1,3 +1,5 @@
+import ModalLayout from "@/components/modal/ModalLayout";
+
 export default function LoginModal() {
-  return <div>Login Modal</div>;
+  return <ModalLayout>Login Modal</ModalLayout>;
 }
