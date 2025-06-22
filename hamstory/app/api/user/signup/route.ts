@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
   const client = new MongoClient(url);
 
   await client.connect();
-  console.log("Connected successfully to server");
 
   const db = client.db("hamstory");
 

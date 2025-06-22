@@ -11,10 +11,16 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
+  modal,
   children,
 }: Readonly<{
-  children: React.ReactNode;
   modal: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider>
+      {modal}
+      {children}
+    </ThemeProvider>
+  );
 }

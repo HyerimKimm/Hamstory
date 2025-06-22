@@ -20,6 +20,7 @@ export default function MainPage() {
           <span className={styles.brand}>H</span>amstory
         </h3>
       </Link>
+      <Link href="/login">로그인</Link>
     </header>
   );
 }
