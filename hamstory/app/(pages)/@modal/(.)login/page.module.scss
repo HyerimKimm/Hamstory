@@ -12,7 +12,7 @@
   @include mixin.flex(row, center, center, null, null);
   width: 100%;
   padding: 12px;
-  border-bottom: 1px solid variables.$grey02;
+  border-bottom: 1px solid variables.$grey05;
 }
 .content_wrap {
   padding: 20px;
