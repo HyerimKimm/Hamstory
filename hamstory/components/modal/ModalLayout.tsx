@@ -11,7 +11,7 @@ export default function ModalLayout({
 }) {
   const router = useRouter();
   return (
-    <div className={styles.modal_overay} onClick={router.back}>
+    <div className={styles.modal_overlay} onClick={router.back}>
       {children}
     </div>
   );
