@@ -2,5 +2,32 @@
 @use "mixin";
 
 .content_wrap {
+  width: 100%;
   padding: 20px;
+  @include mixin.flex(column, flex-start, flex-start, 16px, null);
+}
+
+.content_input_wrap {
+  width: 100%;
+  @include mixin.flex(column, flex-start, flex-start, 4px, null);
+}
+
+.label {
+  @include mixin.font(variables.$fn, 400, variables.$white, null);
+}
+
+.content_input {
+  width: 100%;
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid variables.$grey05;
+  padding: 0 8px;
+
+  &::placeholder {
+    @include mixin.font(variables.$fn, 400, variables.$grey05, null);
+  }
+
+  &:focus {
+    border: 1px solid variables.$brand01;
+  }
 }

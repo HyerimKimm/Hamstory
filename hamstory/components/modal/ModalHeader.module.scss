@@ -10,8 +10,7 @@
   border-bottom: 1px solid variables.$grey05;
 }
 .header_title {
-  font-size: 20px;
-  font-weight: 600;
+  @include mixin.font(variables.$fxl, 600, variables.$white, null);
   flex: 1;
 }
 .close_button {
