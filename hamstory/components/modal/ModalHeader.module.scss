@@ -1,0 +1,26 @@
+@use "variables";
+@use "mixin";
+
+.header_wrap {
+  position: relative;
+  height: 52px;
+  @include mixin.flex(row, center, center, null, null);
+  width: 100%;
+  padding: 0px 12px 0 20px;
+  border-bottom: 1px solid variables.$grey05;
+}
+.header_title {
+  font-size: 20px;
+  font-weight: 600;
+  flex: 1;
+}
+.close_button {
+  width: 32px;
+  height: 32px;
+  @include mixin.flex(row, center, center, null, null);
+
+  > .icon {
+    width: 24px;
+    height: 24px;
+  }
+}

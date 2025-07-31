@@ -1,19 +1,6 @@
 @use "variables";
 @use "mixin";
 
-.modal_wrap {
-  max-width: 600px;
-  border-radius: 8px;
-  background-color: variables.$black;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-}
-.header_wrap {
-  position: relative;
-  @include mixin.flex(row, center, center, null, null);
-  width: 100%;
-  padding: 12px;
-  border-bottom: 1px solid variables.$grey05;
-}
 .content_wrap {
   padding: 20px;
 }
