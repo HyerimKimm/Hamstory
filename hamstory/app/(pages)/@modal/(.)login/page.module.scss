@@ -32,3 +32,11 @@
     outline-offset: -1px;
   }
 }
+
+.submit_button {
+  width: 100%;
+  height: 40px;
+  border-radius: 4px;
+  background-color: variables.$brand01;
+  @include mixin.font(variables.$fn, 600, variables.$white, null);
+}
