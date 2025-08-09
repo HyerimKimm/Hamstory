@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -51,9 +53,6 @@ export default function LoginModal() {
     <ModalLayout width={330}>
       <ModalHeader title="로그인" />
       <form className={styles.content_wrap} action={formAction}>
-        {state.message && (
-          <div className={styles.error_message}>{state.message}</div>
-        )}
         <div className={styles.content_input_wrap}>
           <label className={styles.label}>이메일</label>
           <input
@@ -75,7 +74,9 @@ export default function LoginModal() {
             required
           />
         </div>
-
+        {state.message && (
+          <div className={styles.error_message}>{state.message}</div>
+        )}
         <button
           type="submit"
           className={styles.submit_button}
@@ -83,6 +84,12 @@ export default function LoginModal() {
         >
           {pending ? "로그인 중..." : "로그인"}
         </button>
+        <div className={styles.signup_link_wrap}>
+          <span className={styles.signup_link_text}>회원이 아니신가요?</span>
+          <Link href="/signup" className={styles.signup_link}>
+            회원가입
+          </Link>
+        </div>
       </form>
     </ModalLayout>
   );
