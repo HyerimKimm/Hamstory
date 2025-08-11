@@ -1,5 +1,3 @@
-import ModalLayout from "@/components/modal/ModalLayout";
-
 export default function SignupModal() {
-  return <ModalLayout>Signup Modal</ModalLayout>;
+  return <div>회원가입 모달</div>;
 }
