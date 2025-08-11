@@ -86,7 +86,7 @@ export default function LoginModal() {
         </button>
         <div className={styles.signup_link_wrap}>
           <span className={styles.signup_link_text}>회원이 아니신가요?</span>
-          <Link href="/signup" className={styles.signup_link}>
+          <Link href="signup" className={styles.signup_link}>
             회원가입
           </Link>
         </div>
