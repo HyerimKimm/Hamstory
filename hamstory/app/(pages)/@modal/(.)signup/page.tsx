@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useActionState } from "react";
 
 import ModalHeader from "@/components/modal/ModalHeader";
@@ -8,8 +10,17 @@ import ModalLayout from "@/components/modal/ModalLayout";
 import styles from "./page.module.scss";
 
 export default function SignupModal() {
+  const router = useRouter();
+
   const [state, formAction] = useActionState(
-    async (prevState: { message: string | null }, formData: FormData) => {
+    async (
+      prevState: {
+        success: boolean;
+        message: string;
+        data: string | object | null;
+      },
+      formData: FormData,
+    ) => {
       try {
         const nickname = formData.get("nickname");
         const email = formData.get("email");
@@ -24,25 +35,24 @@ export default function SignupModal() {
         });
 
         const data = await response.json();
-        console.log(data);
 
-        if (!response.ok) {
-          return { message: data.message || "회원가입에 실패했습니다." };
-        }
-
-        // 회원가입 성공 시 처리
+        // API 응답을 그대로 반환하여 상태와 일치시킴
         if (data.success) {
           // 회원가입 성공 후 리다이렉트 또는 상태 업데이트
-          return { message: null };
-        } else {
-          return { message: data.message || "회원가입에 실패했습니다." };
+          router.back();
         }
+
+        return data;
       } catch (error) {
         console.error("회원가입 에러:", error);
-        return { message: "서버 오류가 발생했습니다." };
+        return {
+          success: false,
+          message: "서버 오류가 발생했습니다.",
+          data: null,
+        };
       }
     },
-    { message: null },
+    { success: false, message: "", data: null },
   );
 
   return (
@@ -82,7 +92,7 @@ export default function SignupModal() {
           />
         </div>
 
-        {state.message && (
+        {!state.success && state.message && (
           <div className={styles.error_message}>{state.message}</div>
         )}
 
