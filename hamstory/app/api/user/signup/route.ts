@@ -33,7 +33,10 @@ export async function POST(req: NextRequest) {
 
     response.success = true;
     response.message = "성공";
-    response.data = result;
+    response.data = {
+      acknowledged: result.acknowledged,
+      insertedId: result.insertedId,
+    };
   } catch (e) {
     console.error(e);
     response.success = false;
