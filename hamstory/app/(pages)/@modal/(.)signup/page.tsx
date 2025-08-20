@@ -52,7 +52,7 @@ export default function SignupModal() {
           />
         </div>
 
-        {!state.success && state.message && (
+        {state.message && (
           <div className={styles.error_message}>{state.message}</div>
         )}
 

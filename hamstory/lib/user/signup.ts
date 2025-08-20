@@ -1,7 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
-
 import { MongoClient } from "mongodb";
 
 const url =
@@ -29,9 +27,14 @@ export default async function signup(
     });
 
     if (result.acknowledged) {
-      redirect("/login");
-    } else {
-      throw new Error("회원가입 실패");
+      return {
+        success: true,
+        message: "회원가입 성공",
+        data: {
+          acknowledged: result.acknowledged,
+          insertedId: result.insertedId.toString(),
+        },
+      };
     }
   } catch (e) {
     return {
