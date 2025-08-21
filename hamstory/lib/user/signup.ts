@@ -35,6 +35,12 @@ export default async function signup(
           insertedId: result.insertedId.toString(),
         },
       };
+    } else {
+      return {
+        success: false,
+        message: "회원가입 실패",
+        data: null,
+      };
     }
   } catch (e) {
     return {
