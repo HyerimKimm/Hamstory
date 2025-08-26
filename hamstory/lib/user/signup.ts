@@ -2,8 +2,7 @@
 
 import { MongoClient } from "mongodb";
 
-const url =
-  "mongodb+srv://sue05124:hlkim980103@hamstory.bgdlfqq.mongodb.net/?retryWrites=true&w=majority&appName=Hamstory";
+const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 export default async function signup(
   prevState: {
