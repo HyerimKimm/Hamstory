@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import signup from "@/lib/user/signup";
 import { useActionState } from "react";
 
@@ -9,11 +11,32 @@ import ModalLayout from "@/components/modal/ModalLayout";
 import styles from "./page.module.scss";
 
 export default function SignupModal() {
-  const [state, formAction] = useActionState(signup, {
-    success: false,
-    message: "",
-    data: null,
-  });
+  const router = useRouter();
+
+  const [state, formAction] = useActionState(
+    async (
+      prevState: {
+        success: boolean;
+        message: string;
+        data: string | object | null;
+      },
+      formData: FormData,
+    ) => {
+      const result = await signup(prevState, formData);
+
+      if (result.success) {
+        alert("회원가입이 완료되었습니다.");
+        router.back();
+      }
+
+      return result;
+    },
+    {
+      success: false,
+      message: "",
+      data: null,
+    },
+  );
 
   return (
     <ModalLayout width={330}>
@@ -52,7 +75,7 @@ export default function SignupModal() {
           />
         </div>
 
-        {state.message && (
+        {state?.message && (
           <div className={styles.error_message}>{state.message}</div>
         )}
 
