@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import login from "@/lib/user/login";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -12,39 +13,23 @@ import styles from "./page.module.scss";
 
 export default function LoginModal() {
   const [state, formAction] = useActionState(
-    async (prevState: { message: string | null }, formData: FormData) => {
-      try {
-        const email = formData.get("email");
-        const password = formData.get("password");
+    async (
+      prevState: {
+        success: boolean;
+        message: string;
+        data: string | object | null;
+      },
+      formData: FormData,
+    ) => {
+      const result = await login(prevState, formData);
 
-        const response = await fetch("/api/user/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          return { message: data.message || "로그인에 실패했습니다." };
-        }
-
-        // 로그인 성공 시 처리
-        if (data.success) {
-          // 로그인 성공 후 리다이렉트 또는 상태 업데이트
-          window.location.href = "/"; // 또는 원하는 페이지로 리다이렉트
-          return { message: null };
-        } else {
-          return { message: data.message || "로그인에 실패했습니다." };
-        }
-      } catch (error) {
-        console.error("로그인 에러:", error);
-        return { message: "서버 오류가 발생했습니다." };
-      }
+      return result;
     },
-    { message: null },
+    {
+      success: false,
+      message: "",
+      data: null,
+    },
   );
 
   const { pending, data, method } = useFormStatus();

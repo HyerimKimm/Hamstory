@@ -2,6 +2,8 @@
 
 import { MongoClient } from "mongodb";
 
+import { hashUserPassword } from "./hash";
+
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 export default async function signup(
@@ -22,7 +24,7 @@ export default async function signup(
     const result = await db.collection("users").insertOne({
       nickname: formData.get("nickname"),
       email: formData.get("email"),
-      password: formData.get("password"),
+      password: hashUserPassword(formData.get("password") as string),
     });
 
     if (result.acknowledged) {

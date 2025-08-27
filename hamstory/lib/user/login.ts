@@ -2,6 +2,8 @@
 
 import { MongoClient } from "mongodb";
 
+import { verifyPassword } from "./hash";
+
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 export default async function login(
@@ -19,6 +21,7 @@ export default async function login(
     return {
       success: false,
       message: "이메일과 비밀번호를 모두 입력해주세요.",
+      data: null,
     };
   }
 
@@ -37,20 +40,33 @@ export default async function login(
       return {
         success: false,
         message: "존재하지 않는 이메일입니다.",
+        data: null,
       };
     }
 
-    if (user.password !== password) {
+    /* 해시된 비밀번호 검증 */
+    const isPasswordValid = verifyPassword(user.password, password as string);
+
+    if (!isPasswordValid) {
       return {
         success: false,
         message: "비밀번호가 일치하지 않습니다.",
+        data: null,
       };
     }
+
+    /* 클라이언트로 전달할 사용자 정보 (비밀번호 제외, _id 문자열 변환) */
+    const userForClient = {
+      _id: user._id.toString(),
+      nickname: user.nickname,
+      email: user.email,
+      // password는 클라이언트로 전달하지 않음
+    };
 
     return {
       success: true,
       message: "로그인에 성공했습니다.",
-      data: user,
+      data: userForClient,
     };
   } finally {
     client.close();
