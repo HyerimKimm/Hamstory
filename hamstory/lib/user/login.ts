@@ -33,7 +33,7 @@ export default async function login(
     const db = client.db("hamstory");
     const collection = db.collection("users");
 
-    /* Todo : 입력받은 이메일, 비밀번호로 유저 정보 조회 */
+    /* 입력받은 이메일, 비밀번호로 유저 정보 조회 */
     const user = await collection.findOne({ email });
 
     if (!user) {
