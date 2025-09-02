@@ -6,10 +6,11 @@ import { MongoClient } from "mongodb";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
-const client = new MongoClient(url);
-await client.connect();
+// Lucia를 위한 전용 클라이언트 (어댑터용)
+const adapterClient = new MongoClient(url);
+await adapterClient.connect();
 
-const db = client.db("hamstory");
+const db = adapterClient.db("hamstory");
 
 /*
 1번째 인수: 세션 컬렉션
@@ -42,3 +43,14 @@ export async function createAuthSession(userId: string) {
     sessionCookie.attributes,
   );
 }
+
+// 프로세스 종료 시 어댑터 클라이언트 정리
+process.on("SIGINT", async () => {
+  await adapterClient.close();
+  process.exit(0);
+});
+
+process.on("SIGTERM", async () => {
+  await adapterClient.close();
+  process.exit(0);
+});
