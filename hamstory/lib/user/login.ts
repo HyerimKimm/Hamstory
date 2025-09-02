@@ -2,6 +2,7 @@
 
 import { MongoClient } from "mongodb";
 
+import { createAuthSession } from "./auth";
 import { verifyPassword } from "./hash";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
@@ -62,6 +63,10 @@ export default async function login(
       email: user.email,
       // password는 클라이언트로 전달하지 않음
     };
+
+    const userId = user._id.toString();
+
+    await createAuthSession(userId); // 로그인 성공했으니까 클라이언트 요청 시 헤더에 세션 쿠키 추가
 
     return {
       success: true,

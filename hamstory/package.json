@@ -10,7 +10,10 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@lucia-auth/adapter-mongodb": "^1.0.3",
+    "@node-rs/argon2": "^2.0.2",
     "framer-motion": "^12.4.3",
+    "lucia": "^3.2.2",
     "mongodb": "^6.16.0",
     "next": "15.3.2",
     "react": "^19.0.0",
