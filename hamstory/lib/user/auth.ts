@@ -44,13 +44,56 @@ export async function createAuthSession(userId: string) {
   );
 }
 
-// 프로세스 종료 시 어댑터 클라이언트 정리
-process.on("SIGINT", async () => {
-  await adapterClient.close();
-  process.exit(0);
-});
+export async function verifyAuth() {
+  const sessionCookie = (await cookies()).get(lucia.sessionCookieName);
 
-process.on("SIGTERM", async () => {
-  await adapterClient.close();
-  process.exit(0);
-});
+  if (!sessionCookie) {
+    return {
+      success: false,
+      message: "세션이 존재하지 않습니다.",
+      data: null,
+    };
+  }
+
+  const sessionId = sessionCookie.value;
+
+  if (!sessionId) {
+    return {
+      success: false,
+      message: "세션 아이디가 존재하지 않습니다.",
+      data: null,
+    };
+  }
+
+  const result = await lucia.validateSession(sessionId);
+
+  try {
+    /* 활성화 되고 유효한 세션을 찾은 경우 */
+    if (result.session && result.session.fresh) {
+      /* 세션 쿠키 기간 연장 */
+      const sessionCookie = lucia.createSessionCookie(result.session.id);
+
+      (await cookies()).set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }
+
+    /* 세션을 찾지 못한 경우 -> 전송된 세션 쿠키를 삭제 */
+    if (!result.session) {
+      const sessionCookie = lucia.createBlankSessionCookie();
+
+      /* 빈 세션 쿠키를 생성하고 쿠키 저장소에 저장 */
+      (await cookies()).set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+    }
+  } catch {
+    /* next.js에서는 페이지 렌더링 과정의 일부에서 쿠키를 설정할 수 없음 */
+    /* 따라서 예외 처리 */
+    /* 예외 처리 시 쿠키 설정 시도를 무시하고 계속 진행 */
+  }
+}
