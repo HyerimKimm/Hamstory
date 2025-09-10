@@ -1,7 +1,8 @@
 import { cookies } from "next/headers";
 
 import { MongodbAdapter } from "@lucia-auth/adapter-mongodb";
-import { Lucia } from "lucia";
+import { verify } from "crypto";
+import { Lucia, Session, User } from "lucia";
 import { MongoClient } from "mongodb";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
@@ -21,6 +22,7 @@ const adapter = new MongodbAdapter(
   db.collection("users"),
 );
 
+/* Lucia 인스턴스 생성 */
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     name: "auth_session", // 명시적으로 쿠키 이름 설정
@@ -32,6 +34,7 @@ export const lucia = new Lucia(adapter, {
   },
 });
 
+/* 세션 생성 함수 */
 export async function createAuthSession(userId: string) {
   const session = await lucia.createSession(userId, {});
 
@@ -44,10 +47,20 @@ export async function createAuthSession(userId: string) {
   );
 }
 
+/* 세션 검증 함수 */
 export async function verifyAuth(): Promise<{
   success: boolean;
   message: string;
-  data: any;
+  data:
+    | {
+        user: User;
+        session: Session;
+      }
+    | {
+        user: null;
+        session: null;
+      }
+    | null;
 }> {
   const sessionCookie = (await cookies()).get(lucia.sessionCookieName);
 
@@ -85,7 +98,7 @@ export async function verifyAuth(): Promise<{
     }
 
     /* 세션을 찾지 못한 경우 -> 전송된 세션 쿠키를 삭제 */
-    if (!result.session) {
+    if (!result.session || !result.user) {
       const sessionCookie = lucia.createBlankSessionCookie();
 
       /* 빈 세션 쿠키를 생성하고 쿠키 저장소에 저장 */
@@ -94,6 +107,12 @@ export async function verifyAuth(): Promise<{
         sessionCookie.value,
         sessionCookie.attributes,
       );
+
+      return {
+        success: false,
+        message: "세션 검증 실패",
+        data: null,
+      };
     }
   } catch {
     /* next.js에서는 페이지 렌더링 과정의 일부에서 쿠키를 설정할 수 없음 */
@@ -103,7 +122,40 @@ export async function verifyAuth(): Promise<{
     return {
       success: true,
       message: "세션 검증 성공",
-      data: result.user,
+      data: result,
     };
   }
+}
+
+/* 세션 삭제 함수 */
+export async function destroyAuthSession(): Promise<{
+  success: boolean;
+  message: string;
+  data: null;
+}> {
+  const result = await verifyAuth();
+
+  if (!result.success || !result.data || !result.data.session) {
+    return {
+      success: false,
+      message: "세션 삭제 실패",
+      data: null,
+    };
+  }
+
+  await lucia.invalidateSession(result.data.session.id);
+
+  const sessionCookie = lucia.createBlankSessionCookie();
+
+  (await cookies()).set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
+
+  return {
+    success: true,
+    message: "세션 삭제 성공",
+    data: null,
+  };
 }
