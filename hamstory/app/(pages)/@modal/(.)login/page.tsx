@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import login from "@/lib/user/login";
 import { useActionState } from "react";
@@ -12,6 +13,8 @@ import ModalLayout from "@/components/modal/ModalLayout";
 import styles from "./page.module.scss";
 
 export default function LoginModal() {
+  const router = useRouter();
+
   const [state, formAction] = useActionState(
     async (
       prevState: {
@@ -22,6 +25,11 @@ export default function LoginModal() {
       formData: FormData,
     ) => {
       const result = await login(prevState, formData);
+
+      if (result.success) {
+        alert("로그인에 성공했습니다.");
+        window.location.href = "/"; // 메인 페이지로 직접 이동하여 모달을 닫고 상태를 새로고침
+      }
 
       return result;
     },

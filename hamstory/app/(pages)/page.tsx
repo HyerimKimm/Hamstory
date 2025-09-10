@@ -1,11 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { verifyAuth } from "@/lib/user/auth";
+
 import logo from "@/assets/images/logos/logo.svg";
 
 import styles from "./page.module.scss";
 
-export default function MainPage() {
+export default async function MainPage() {
+  const session = await verifyAuth();
+
   return (
     <header className={styles.header}>
       <Link href="/" className={styles.header_logo}>
@@ -20,7 +24,11 @@ export default function MainPage() {
           <span className={styles.brand}>H</span>amstory
         </h3>
       </Link>
-      <Link href="/login">로그인</Link>
+      {session.success ? (
+        <button>로그아웃</button>
+      ) : (
+        <Link href="/login">로그인</Link>
+      )}
     </header>
   );
 }
