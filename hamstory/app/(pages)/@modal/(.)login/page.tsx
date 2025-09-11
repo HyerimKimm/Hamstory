@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import login from "@/lib/user/login";
+import login from "@/action/login";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 

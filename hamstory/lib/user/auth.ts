@@ -138,7 +138,7 @@ export async function destroyAuthSession(): Promise<{
   if (!result.success || !result.data || !result.data.session) {
     return {
       success: false,
-      message: "세션 삭제 실패",
+      message: "세션 검증 실패",
       data: null,
     };
   }

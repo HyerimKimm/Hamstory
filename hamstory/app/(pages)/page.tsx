@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import logout from "@/action/logout";
 import { verifyAuth } from "@/lib/user/auth";
 
 import logo from "@/assets/images/logos/logo.svg";
@@ -25,7 +26,9 @@ export default async function MainPage() {
         </h3>
       </Link>
       {session.success ? (
-        <button>로그아웃</button>
+        <form action={logout}>
+          <button type="submit">로그아웃</button>
+        </form>
       ) : (
         <Link href="/login">로그인</Link>
       )}

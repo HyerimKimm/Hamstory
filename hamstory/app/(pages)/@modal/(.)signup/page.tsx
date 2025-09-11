@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import signup from "@/lib/user/signup";
+import signup from "@/action/signup";
 import { useActionState } from "react";
 
 import ModalHeader from "@/components/modal/ModalHeader";

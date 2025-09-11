@@ -2,7 +2,7 @@
 
 import { MongoClient } from "mongodb";
 
-import { hashUserPassword } from "./hash";
+import { hashUserPassword } from "../lib/user/hash";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
