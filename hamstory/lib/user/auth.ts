@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 
 import { MongodbAdapter } from "@lucia-auth/adapter-mongodb";
-import { verify } from "crypto";
 import { Lucia, Session, User } from "lucia";
 import { MongoClient } from "mongodb";
 
@@ -84,7 +83,6 @@ export async function verifyAuth(): Promise<{
 
   const result = await lucia.validateSession(sessionId);
 
-  console.log(result);
   try {
     /* 활성화 되고 유효한 세션을 찾은 경우 */
     if (result.session && result.session.fresh) {
