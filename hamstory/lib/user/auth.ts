@@ -84,6 +84,7 @@ export async function verifyAuth(): Promise<{
 
   const result = await lucia.validateSession(sessionId);
 
+  console.log(result);
   try {
     /* 활성화 되고 유효한 세션을 찾은 경우 */
     if (result.session && result.session.fresh) {

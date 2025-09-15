@@ -56,17 +56,15 @@ export default async function login(
       };
     }
 
-    /* 클라이언트로 전달할 사용자 정보 (비밀번호 제외, _id 문자열 변환) */
+    /* 클라이언트로 전달할 사용자 정보 (비밀번호 제외) */
     const userForClient = {
-      _id: user._id.toString(),
+      _id: user._id,
       nickname: user.nickname,
       email: user.email,
       // password는 클라이언트로 전달하지 않음
     };
 
-    const userId = user._id.toString();
-
-    await createAuthSession(userId); // 로그인 성공했으니까 클라이언트 요청 시 헤더에 세션 쿠키 추가
+    await createAuthSession(user._id as any); // 로그인 성공했으니까 클라이언트 요청 시 헤더에 세션 쿠키 추가
 
     return {
       success: true,
