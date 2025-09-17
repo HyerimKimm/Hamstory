@@ -7,6 +7,8 @@ import { uiStore } from "@/stores/uiStore";
 
 import "@/styles/globals.scss";
 
+import Toast from "../toast/Toast";
+
 const pretendard = localFont({
   src: [
     {
@@ -55,6 +57,7 @@ export default function ThemeProvider({
           ${oxanium.className}
         `}
       >
+        <Toast />
         {children}
       </body>
     </html>

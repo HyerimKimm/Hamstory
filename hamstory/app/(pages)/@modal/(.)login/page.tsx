@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import login from "@/action/login";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import { toast } from "react-toastify";
 
 import ModalHeader from "@/components/modal/ModalHeader";
 import ModalLayout from "@/components/modal/ModalLayout";
@@ -27,8 +28,9 @@ export default function LoginModal() {
       const result = await login(prevState, formData);
 
       if (result.success) {
-        alert("로그인에 성공했습니다.");
-        window.location.href = "/"; // 메인 페이지로 직접 이동하여 모달을 닫고 상태를 새로고침
+        toast.success("로그인에 성공했습니다.");
+        router.refresh(); // 페이지 캐시 무효화
+        router.back(); // 모달을 닫고 이전 페이지로 돌아가기
       }
 
       return result;
