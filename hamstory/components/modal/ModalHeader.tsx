@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import closeIcon from "@/assets/images/close_icon.svg";
+import closeIcon from "@/assets/images/icons/close_icon.svg";
 
 import styles from "./ModalHeader.module.scss";
 
