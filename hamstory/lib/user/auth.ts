@@ -46,7 +46,12 @@ export async function createAuthSession(userId: string) {
   );
 }
 
-/* 세션 검증 함수 */
+/* 세션 검증 함수 
+  1. 설정된 세션 쿠키가 없으면 세션 검증 실패
+  2. 세션 쿠키가 있으면 세션 검증 시도
+  3. 세션 검증 성공 시 세션 쿠키 기간 연장
+  4. 세션 검증 실패 시 세션 쿠키 삭제
+*/
 export async function verifyAuth(): Promise<{
   success: boolean;
   message: string;

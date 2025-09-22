@@ -23,3 +23,17 @@
     color: variables.$brand01;
   }
 }
+
+.header_right_wrapper {
+  @include mixin.flex(row, flex-end, center, 12px, null);
+}
+
+.header_profile_button {
+  @include mixin.flex(row, space-between, center, 0, null);
+
+  > img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+  }
+}
