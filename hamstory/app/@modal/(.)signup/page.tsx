@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 
 import signup from "@/action/signup";
 import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 
 import ModalHeader from "@/components/modal/ModalHeader";
 import ModalLayout from "@/components/modal/ModalLayout";
@@ -38,9 +39,18 @@ export default function SignupModal() {
     },
   );
 
+  const { pending } = useFormStatus();
+
   return (
     <ModalLayout width={330}>
-      <ModalHeader title="회원가입" />
+      <ModalHeader
+        title="회원가입"
+        closeDisabled={pending}
+        onClose={() => {
+          if (pending) return;
+          router.back();
+        }}
+      />
       <form className={styles.content_wrap} action={formAction}>
         <div className={styles.content_input_wrap}>
           <label className={styles.label}>닉네임</label>

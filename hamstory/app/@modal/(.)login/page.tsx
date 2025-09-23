@@ -46,7 +46,14 @@ export default function LoginModal() {
 
   return (
     <ModalLayout width={330}>
-      <ModalHeader title="로그인" />
+      <ModalHeader
+        title="로그인"
+        closeDisabled={pending}
+        onClose={() => {
+          if (pending) return;
+          router.back();
+        }}
+      />
       <form className={styles.content_wrap} action={formAction}>
         <div className={styles.content_input_wrap}>
           <label className={styles.label}>이메일</label>
