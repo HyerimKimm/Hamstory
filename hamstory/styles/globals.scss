@@ -72,3 +72,9 @@ h5 {
 strong {
   color: variables.$brand01;
 }
+
+// 키보드 포커스 시에만 테두리 표시
+*:focus-visible {
+  outline: 1px solid variables.$brand01;
+  outline-offset: -1px;
+}
