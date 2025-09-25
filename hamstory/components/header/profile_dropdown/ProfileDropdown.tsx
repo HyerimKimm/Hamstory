@@ -55,7 +55,7 @@ export default function ProfileDropdown() {
         {isOpen && (
           <motion.div
             initial={{ height: 0 }}
-            animate={{ height: 96 }}
+            animate={{ height: 100 }}
             exit={{ height: 0 }}
             transition={{ duration: 0.15 }}
             className={styles.header_profile_dropdown_content}

@@ -17,13 +17,13 @@
 
 .header_profile_dropdown_content {
   width: 10rem;
+  padding: 2px;
   background-color: variables.$backdropWhite;
   position: absolute;
   top: 35px;
   right: 0;
   border-radius: 4px;
   z-index: variables.$ziDropdown;
-  height: 0;
   overflow: hidden;
 }
 

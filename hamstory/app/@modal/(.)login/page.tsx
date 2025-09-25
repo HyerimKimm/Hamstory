@@ -44,15 +44,17 @@ export default function LoginModal() {
 
   const { pending, data, method } = useFormStatus();
 
+  function handleClose() {
+    if (pending) return;
+    router.back();
+  }
+
   return (
-    <ModalLayout width={330}>
+    <ModalLayout width={330} onClose={handleClose}>
       <ModalHeader
         title="로그인"
         closeDisabled={pending}
-        onClose={() => {
-          if (pending) return;
-          router.back();
-        }}
+        onClose={handleClose}
       />
       <form className={styles.content_wrap} action={formAction}>
         <div className={styles.content_input_wrap}>
