@@ -32,6 +32,15 @@
   height: 32px;
   font-size: variables.$fn;
 
+  // Link와 button 요소의 일관된 스타일링을 위한 추가 속성
+  @include mixin.flex(row, center, center, 0, null);
+  padding: 0 12px;
+  text-align: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+
   &:hover {
     color: variables.$brand01;
     transition: color 0.15s ease-in-out;

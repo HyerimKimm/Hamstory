@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import logout from "@/action/logout";
@@ -13,11 +14,13 @@ import profile_default_darkmode from "@/assets/images/icons/profile_default_dark
 
 import styles from "./ProfileDropdown.module.scss";
 
-export default function ProfileDropdown() {
+export default function ProfileDropdown({ userId }: { userId: string }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
+
+  console.log(userId);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -60,12 +63,18 @@ export default function ProfileDropdown() {
             transition={{ duration: 0.15 }}
             className={styles.header_profile_dropdown_content}
           >
-            <button className={styles.header_profile_dropdown_content_item}>
+            <Link
+              className={styles.header_profile_dropdown_content_item}
+              href={`/${userId}/posts`}
+            >
               내 블로그
-            </button>
-            <button className={styles.header_profile_dropdown_content_item}>
+            </Link>
+            <Link
+              className={styles.header_profile_dropdown_content_item}
+              href="/settings"
+            >
               설정
-            </button>
+            </Link>
             <button
               className={styles.header_profile_dropdown_content_item}
               onClick={async () => {

@@ -1,13 +1,14 @@
-import { redirect } from "next/navigation";
-
 import { verifyAuth } from "@/lib/user/auth";
 
+import Header from "@/components/header/Header";
+
 export default async function SettingsPage() {
-  const result = await verifyAuth();
+  const session = await verifyAuth();
 
-  if (!result.success) {
-    redirect("/login");
-  }
-
-  return <div>Settings Page.</div>;
+  return (
+    <>
+      <Header verifyAuth={session} />
+      여기서 내 블로그 설정 수정
+    </>
+  );
 }

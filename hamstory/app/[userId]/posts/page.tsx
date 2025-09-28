@@ -1,25 +1,18 @@
-type PostType = {
-  id: number;
-  title: string;
-};
+import { verifyAuth } from "@/lib/user/auth";
 
-export default async function PostListPage() {
-  const res = await fetch("http://localhost:3000/api/1/posts", {
-    method: "GET",
-    headers: {
-      "X-ID": "test",
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await res.json();
+import Header from "@/components/header/Header";
 
-  const posts: PostType[] = data.posts;
+export default async function PostListPage({
+  params,
+}: {
+  params: { userId: string };
+}) {
+  const session = await verifyAuth();
 
   return (
-    <div>
-      {posts.map((post: PostType) => (
-        <li key={post.id}>{post.title}</li>
-      ))}
-    </div>
+    <>
+      <Header verifyAuth={session} />
+      여기에 내 블로그 게시물 노출
+    </>
   );
 }
