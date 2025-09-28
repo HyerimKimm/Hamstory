@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import Header from "@/components/header/Header";
 import ThemeProvider from "@/components/provider/ThemeProvider";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <ThemeProvider>
+      <Header />
       {modal}
       {children}
     </ThemeProvider>

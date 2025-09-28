@@ -1,33 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Session, User } from "lucia";
+import { verifyAuth } from "@/lib/user/auth";
 
 import logo from "@/assets/images/logos/logo.svg";
 
 import styles from "./Header.module.scss";
 import ProfileDropdown from "./profile_dropdown/ProfileDropdown";
 
-export default function Header({
-  verifyAuth,
-}: {
-  verifyAuth: {
-    success: boolean;
-    message: string;
-    data:
-      | {
-          user: User;
-          session: Session;
-        }
-      | {
-          user: null;
-          session: null;
-        }
-      | null;
-  };
-}) {
-  const isLogin = verifyAuth.success;
-  const userId = verifyAuth.data?.user?.id || "";
+export default async function Header() {
+  const session = await verifyAuth();
+
+  const isLogin = session.success;
+  const userId = session.data?.user?.id || "";
 
   return (
     <header className={styles.header}>
