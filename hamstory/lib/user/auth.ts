@@ -55,16 +55,10 @@ export async function createAuthSession(userId: string) {
 export async function verifyAuth(): Promise<{
   success: boolean;
   message: string;
-  data:
-    | {
-        user: User;
-        session: Session;
-      }
-    | {
-        user: null;
-        session: null;
-      }
-    | null;
+  data: {
+    user: User;
+    session: Session;
+  } | null;
 }> {
   const sessionCookie = (await cookies()).get(lucia.sessionCookieName);
 
@@ -122,13 +116,25 @@ export async function verifyAuth(): Promise<{
     /* next.js에서는 페이지 렌더링 과정의 일부에서 쿠키를 설정할 수 없음 */
     /* 따라서 예외 처리 */
     /* 예외 처리 시 쿠키 설정 시도를 무시하고 계속 진행 */
-  } finally {
+  }
+
+  // 여기 도달했다면 result.session과 result.user가 모두 존재함이 보장됨
+  if (!result.session || !result.user) {
     return {
-      success: true,
-      message: "세션 검증 성공",
-      data: result,
+      success: false,
+      message: "세션 검증 실패",
+      data: null,
     };
   }
+
+  return {
+    success: true,
+    message: "세션 검증 성공",
+    data: {
+      user: result.user,
+      session: result.session,
+    },
+  };
 }
 
 /* 세션 삭제 함수 */

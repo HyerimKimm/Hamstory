@@ -13,7 +13,9 @@ interface User {
   profile_image: string;
 }
 
-export default async function getUserProfile(userId: string) {
+export default async function getUserProfile(
+  userId: string,
+): Promise<User | null> {
   const client = new MongoClient(url);
 
   await client.connect();
