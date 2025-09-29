@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import logout from "@/action/logout";
 import { AnimatePresence, motion } from "framer-motion";
@@ -17,11 +17,22 @@ import styles from "./ProfileDropdown.module.scss";
 export default function ProfileDropdown({ userId }: { userId: string }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(userId);
+  async function handleLogout() {
+    const result = await logout();
 
+    if (result.success) {
+      toast.success(result.message);
+      router.refresh();
+    } else {
+      toast.error(result.message);
+    }
+  }
+
+  // 클릭 외부 영역 감지
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -38,6 +49,11 @@ export default function ProfileDropdown({ userId }: { userId: string }) {
       window.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  // 라우트 변경 감지하여 드롭다운 닫기
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
     <div ref={dropdownRef} className={styles.header_profile_dropdown}>
@@ -77,16 +93,7 @@ export default function ProfileDropdown({ userId }: { userId: string }) {
             </Link>
             <button
               className={styles.header_profile_dropdown_content_item}
-              onClick={async () => {
-                const result = await logout();
-
-                if (result.success) {
-                  toast.success(result.message);
-                  router.refresh();
-                } else {
-                  toast.error(result.message);
-                }
-              }}
+              onClick={handleLogout}
             >
               로그아웃
             </button>
