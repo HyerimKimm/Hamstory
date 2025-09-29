@@ -1,6 +1,9 @@
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { verifyAuth } from "@/lib/user/auth";
+
+import defaultProfileImage from "@/assets/images/icons/profile_default_darkmode.svg";
 
 export default async function SettingsPage() {
   const session = await verifyAuth();
@@ -9,5 +12,9 @@ export default async function SettingsPage() {
     redirect("/");
   }
 
-  return <div>여기서 내 블로그 설정 수정</div>;
+  return (
+    <form>
+      <Image src={defaultProfileImage} alt="profile" width={100} height={100} />
+    </form>
+  );
 }

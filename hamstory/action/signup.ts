@@ -12,6 +12,7 @@ interface User {
   nickname: string;
   email: string;
   password: string;
+  profile_image: string;
 }
 
 export default async function signup(
@@ -40,6 +41,7 @@ export default async function signup(
       nickname: formData.get("nickname") as string,
       email: formData.get("email") as string,
       password: hashUserPassword(formData.get("password") as string),
+      profile_image: "",
     });
 
     if (result.acknowledged) {
