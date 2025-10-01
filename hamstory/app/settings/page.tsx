@@ -6,6 +6,8 @@ import { verifyAuth } from "@/lib/user/auth";
 
 import ProfileForm from "@/components/settings/ProfileForm";
 
+import styles from "./page.module.scss";
+
 export default async function SettingsPage({
   params,
 }: {
@@ -23,11 +25,14 @@ export default async function SettingsPage({
   const userInfo = await getUserProfile(session.data.user.id);
 
   return (
-    <ProfileForm
-      initialData={{
-        nickname: userInfo?.nickname || "",
-        profile_image: userInfo?.profile_image || "",
-      }}
-    />
+    <main className={styles.page_wrap}>
+      <ProfileForm
+        initialData={{
+          nickname: userInfo?.nickname || "",
+          profile_image: userInfo?.profile_image || "",
+          email: userInfo?.email || "",
+        }}
+      />
+    </main>
   );
 }
