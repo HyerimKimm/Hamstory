@@ -68,6 +68,16 @@ export default function ProfileForm({
     }
   }
 
+  async function handleImageDelete() {
+    const result = await deleteCloudinaryImage(
+      initialData.profile_image_public_id,
+    );
+
+    if (result.success) {
+      updateUserProfileImage(initialData.userId, "", "");
+    }
+  }
+
   return (
     <form className={styles.form_wrap}>
       {/* 프로필 이미지 */}
@@ -94,15 +104,7 @@ export default function ProfileForm({
           <button
             type="button"
             className={`${styles.non_bg_button} ${styles.white}`}
-            onClick={async () => {
-              const result = await deleteCloudinaryImage(
-                initialData.profile_image_public_id,
-              );
-
-              if (result.success) {
-                updateUserProfileImage(initialData.userId, "", "");
-              }
-            }}
+            onClick={handleImageDelete}
           >
             이미지 삭제
           </button>
