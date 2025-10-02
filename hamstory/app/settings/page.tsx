@@ -28,6 +28,7 @@ export default async function SettingsPage({
     <main className={styles.page_wrap}>
       <ProfileForm
         initialData={{
+          userId: session.data.user.id,
           nickname: userInfo?.nickname || "",
           profile_image: userInfo?.profile_image || "",
           email: userInfo?.email || "",

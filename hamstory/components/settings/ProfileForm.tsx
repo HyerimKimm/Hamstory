@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 
-import { uploadImageToCloudinary } from "@/action/updateUserProfileImage";
+import {
+  updateUserProfileImage,
+  uploadImageToCloudinary,
+} from "@/action/updateUserProfileImage";
 import { useRef } from "react";
 import { toast } from "react-toastify";
 
@@ -14,6 +17,7 @@ export default function ProfileForm({
   initialData,
 }: {
   initialData: {
+    userId: string;
     nickname: string;
     profile_image: string;
     email: string;
@@ -40,7 +44,14 @@ export default function ProfileForm({
     try {
       const imageUrl = await uploadImageToCloudinary(file);
 
-      console.log(imageUrl);
+      const result = await updateUserProfileImage(initialData.userId, imageUrl);
+
+      if (result.success) {
+        console.log(result);
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
     } catch (error) {
       console.error("이미지 업로드 에러:", error);
       toast.error("이미지 업로드에 실패했습니다.");

@@ -2,17 +2,11 @@
 
 import { MongoClient } from "mongodb";
 
+import { User } from "@/types/collection";
+
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 // 사용자 인터페이스 정의 - _id를 string으로 명시
-interface User {
-  _id: string;
-  nickname: string;
-  email: string;
-  password: string;
-  profile_image: string;
-}
-
 export default async function getUserProfile(
   userId: string,
 ): Promise<User | null> {
