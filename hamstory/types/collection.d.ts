@@ -3,5 +3,6 @@ export interface User {
   nickname: string;
   email: string;
   password: string;
-  profile_image: string;
+  profile_image_public_id: string;
+  profile_image_url: string;
 }

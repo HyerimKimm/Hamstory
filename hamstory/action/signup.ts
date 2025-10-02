@@ -34,7 +34,8 @@ export default async function signup(
       nickname: formData.get("nickname") as string,
       email: formData.get("email") as string,
       password: hashUserPassword(formData.get("password") as string),
-      profile_image: "",
+      profile_image_public_id: "",
+      profile_image_url: "",
     });
 
     if (result.acknowledged) {

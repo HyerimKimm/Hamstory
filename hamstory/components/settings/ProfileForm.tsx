@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import {
+  deleteCloudinaryImage,
   updateUserProfileImage,
   uploadImageToCloudinary,
 } from "@/action/updateUserProfileImage";
@@ -19,7 +20,8 @@ export default function ProfileForm({
   initialData: {
     userId: string;
     nickname: string;
-    profile_image: string;
+    profile_image_public_id: string;
+    profile_image_url: string;
     email: string;
   };
 }) {
@@ -42,12 +44,20 @@ export default function ProfileForm({
     }
 
     try {
-      const imageUrl = await uploadImageToCloudinary(file);
+      const { data } = await uploadImageToCloudinary(file);
 
-      const result = await updateUserProfileImage(initialData.userId, imageUrl);
+      if (!data) {
+        toast.error("이미지 업로드에 실패했습니다.");
+        return;
+      }
+
+      const result = await updateUserProfileImage(
+        initialData.userId,
+        data.publicId,
+        data.url,
+      );
 
       if (result.success) {
-        console.log(result);
         toast.success(result.message);
       } else {
         toast.error(result.message);
@@ -63,7 +73,7 @@ export default function ProfileForm({
       {/* 프로필 이미지 */}
       <div className={styles.profile_input_wrap}>
         <Image
-          src={initialData.profile_image || defaultProfileImage}
+          src={initialData.profile_image_url || defaultProfileImage}
           alt="profile"
           width={100}
           height={100}
@@ -84,6 +94,15 @@ export default function ProfileForm({
           <button
             type="button"
             className={`${styles.non_bg_button} ${styles.white}`}
+            onClick={async () => {
+              const result = await deleteCloudinaryImage(
+                initialData.profile_image_public_id,
+              );
+
+              if (result.success) {
+                updateUserProfileImage(initialData.userId, "", "");
+              }
+            }}
           >
             이미지 삭제
           </button>

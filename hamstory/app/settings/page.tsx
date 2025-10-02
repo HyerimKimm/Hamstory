@@ -30,7 +30,8 @@ export default async function SettingsPage({
         initialData={{
           userId: session.data.user.id,
           nickname: userInfo?.nickname || "",
-          profile_image: userInfo?.profile_image || "",
+          profile_image_public_id: userInfo?.profile_image_public_id || "",
+          profile_image_url: userInfo?.profile_image_url || "",
           email: userInfo?.email || "",
         }}
       />

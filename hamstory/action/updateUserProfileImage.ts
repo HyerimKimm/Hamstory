@@ -13,7 +13,14 @@ cloudinary.config({
   api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
 });
 
-export async function uploadImageToCloudinary(file: File): Promise<string> {
+export async function uploadImageToCloudinary(file: File): Promise<{
+  success: boolean;
+  message: string;
+  data: {
+    publicId: string;
+    url: string;
+  } | null;
+}> {
   try {
     // File을 ArrayBuffer로 변환
     const arrayBuffer = await file.arrayBuffer();
@@ -39,15 +46,27 @@ export async function uploadImageToCloudinary(file: File): Promise<string> {
         .end(buffer);
     });
 
-    return (result as any).secure_url;
+    return {
+      success: true,
+      message: "프로필 이미지 업로드 성공",
+      data: {
+        publicId: (result as any).public_id,
+        url: (result as any).secure_url,
+      },
+    };
   } catch (error) {
     console.error("Cloudinary 업로드 에러:", error);
-    throw new Error("이미지 업로드에 실패했습니다.");
+    return {
+      success: false,
+      message: "프로필 이미지 업로드 실패",
+      data: null,
+    };
   }
 }
 
 export async function updateUserProfileImage(
   userId: string,
+  publicId: string,
   imageUrl: string,
 ): Promise<{
   success: boolean;
@@ -65,7 +84,12 @@ export async function updateUserProfileImage(
 
     await usersCollection.updateOne(
       { _id: userId },
-      { $set: { profile_image: imageUrl } },
+      {
+        $set: {
+          profile_image_url: imageUrl,
+          profile_image_public_id: publicId,
+        },
+      },
     );
 
     return {
@@ -81,5 +105,31 @@ export async function updateUserProfileImage(
     };
   } finally {
     client.close();
+  }
+}
+
+export async function deleteCloudinaryImage(public_id: string): Promise<{
+  success: boolean;
+  message: string;
+  data: null;
+}> {
+  try {
+    const result = await cloudinary.uploader.destroy(public_id);
+
+    if (result.result === "ok") {
+      return {
+        success: true,
+        message: "프로필 이미지 삭제 성공",
+        data: null,
+      };
+    } else {
+      throw new Error("프로필 이미지 삭제 실패");
+    }
+  } catch (e) {
+    return {
+      success: false,
+      message: "프로필 이미지 삭제 실패",
+      data: null,
+    };
   }
 }
