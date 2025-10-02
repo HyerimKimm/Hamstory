@@ -7,7 +7,7 @@ import {
   updateUserProfileImage,
   uploadImageToCloudinary,
 } from "@/action/updateUserProfileImage";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 import defaultProfileImage from "@/assets/images/icons/profile_default_darkmode.svg";
@@ -26,6 +26,14 @@ export default function ProfileForm({
   };
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [profileImage, setProfileImage] = useState<{
+    publicId: string;
+    url: string;
+  }>({
+    publicId: initialData.profile_image_public_id,
+    url: initialData.profile_image_url,
+  });
 
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -58,6 +66,10 @@ export default function ProfileForm({
       );
 
       if (result.success) {
+        setProfileImage({
+          publicId: data.publicId,
+          url: data.url,
+        });
         toast.success(result.message);
       } else {
         toast.error(result.message);
@@ -69,12 +81,17 @@ export default function ProfileForm({
   }
 
   async function handleImageDelete() {
-    const result = await deleteCloudinaryImage(
-      initialData.profile_image_public_id,
-    );
+    const result = await deleteCloudinaryImage(profileImage.publicId);
 
     if (result.success) {
       updateUserProfileImage(initialData.userId, "", "");
+      setProfileImage({
+        publicId: "",
+        url: "",
+      });
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
     }
   }
 
@@ -83,12 +100,13 @@ export default function ProfileForm({
       {/* 프로필 이미지 */}
       <div className={styles.profile_input_wrap}>
         <Image
-          src={initialData.profile_image_url || defaultProfileImage}
+          src={profileImage.url || defaultProfileImage}
           alt="profile"
           width={100}
           height={100}
           className={styles.profile_image}
         />
+        {/* 이미지 업로드 버튼과 삭제 버튼 */}
         <div>
           <button
             type="button"
@@ -109,6 +127,7 @@ export default function ProfileForm({
             이미지 삭제
           </button>
         </div>
+        {/* 이미지 업로드 인풋 ( 눈에 안보이게 설정 ) */}
         <input
           type="file"
           name="profile_image"
