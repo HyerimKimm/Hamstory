@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 
+import updateUserNickname from "@/action/updateUserInfo";
 import {
   deleteCloudinaryImage,
   updateUserProfileImage,
@@ -35,13 +36,15 @@ export default function ProfileForm({
     url: initialData.profile_image_url,
   });
 
+  const [nickname, setNickname] = useState(initialData.nickname);
+
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // 파일 크기 체크 (5MB 제한)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("파일 크기는 5MB 이하여야 합니다.");
+    // 파일 크기 체크 (1MB 제한)
+    if (file.size > 1 * 1024 * 1024) {
+      toast.error("파일 크기는 1MB 이하여야 합니다.");
       return;
     }
 
@@ -89,6 +92,16 @@ export default function ProfileForm({
         publicId: "",
         url: "",
       });
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+  }
+
+  async function handleNicknameUpdate() {
+    const result = await updateUserNickname(initialData.userId, nickname);
+
+    if (result.success) {
       toast.success(result.message);
     } else {
       toast.error(result.message);
@@ -148,8 +161,13 @@ export default function ProfileForm({
             placeholder="닉네임"
             defaultValue={initialData.nickname}
             className={styles.input}
+            onChange={(e) => setNickname(e.target.value)}
           />
-          <button type="button" className={styles.main_bg_button}>
+          <button
+            type="button"
+            className={styles.main_bg_button}
+            onClick={handleNicknameUpdate}
+          >
             수정
           </button>
         </div>
