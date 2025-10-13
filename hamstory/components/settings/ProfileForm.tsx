@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import updateUserNickname from "@/action/updateUserInfo";
+import { updateUserEmail, updateUserNickname } from "@/action/updateUserInfo";
 import {
   deleteCloudinaryImage,
   updateUserProfileImage,
@@ -37,6 +37,7 @@ export default function ProfileForm({
   });
 
   const [nickname, setNickname] = useState(initialData.nickname);
+  const [email, setEmail] = useState(initialData.email);
 
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -100,6 +101,16 @@ export default function ProfileForm({
 
   async function handleNicknameUpdate() {
     const result = await updateUserNickname(initialData.userId, nickname);
+
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+  }
+
+  async function handleEmailUpdate() {
+    const result = await updateUserEmail(initialData.userId, email);
 
     if (result.success) {
       toast.success(result.message);
@@ -183,8 +194,13 @@ export default function ProfileForm({
             placeholder="이메일"
             defaultValue={initialData.email}
             className={styles.input}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <button type="button" className={styles.main_bg_button}>
+          <button
+            type="button"
+            className={styles.main_bg_button}
+            onClick={handleEmailUpdate}
+          >
             수정
           </button>
         </div>
