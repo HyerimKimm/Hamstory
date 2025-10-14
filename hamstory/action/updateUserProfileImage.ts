@@ -13,6 +13,7 @@ cloudinary.config({
   api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
 });
 
+// 프로필이미지를 Cloudinary에 업로드
 export async function uploadImageToCloudinary(file: File): Promise<{
   success: boolean;
   message: string;
@@ -64,6 +65,7 @@ export async function uploadImageToCloudinary(file: File): Promise<{
   }
 }
 
+// 프로필이미지 URL을 User Collection에 업데이트
 export async function updateUserProfileImage(
   userId: string,
   publicId: string,
@@ -108,6 +110,7 @@ export async function updateUserProfileImage(
   }
 }
 
+// 프로필이미지를 Cloudinary에서 삭제
 export async function deleteCloudinaryImage(public_id: string): Promise<{
   success: boolean;
   message: string;

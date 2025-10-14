@@ -6,7 +6,7 @@ import { Blog, User } from "@/types/collection";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
-// 사용자 인터페이스 정의 - _id를 string으로 명시
+// User Collection의 정보 조회
 export default async function getUserProfile(
   userId: string,
 ): Promise<User | null> {
@@ -27,6 +27,7 @@ export default async function getUserProfile(
   }
 }
 
+// Blog Collection의 정보 조회
 export async function getUserBlog(userId: string): Promise<Blog | null> {
   const client = new MongoClient(url);
 

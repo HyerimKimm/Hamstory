@@ -6,6 +6,7 @@ import { User } from "@/types/collection";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
+// 닉네임 수정
 export async function updateUserNickname(userId: string, nickname: string) {
   if (!userId) {
     return { success: false, message: "유저 정보를 찾을 수 없습니다." };
@@ -46,6 +47,7 @@ export async function updateUserNickname(userId: string, nickname: string) {
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+// 이메일 수정
 export async function updateUserEmail(userId: string, email: string) {
   if (!userId) {
     return { success: false, message: "유저 정보를 찾을 수 없습니다." };
