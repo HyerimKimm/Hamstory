@@ -12,6 +12,7 @@
   "dependencies": {
     "@lucia-auth/adapter-mongodb": "^1.0.3",
     "cloudinary": "^2.7.0",
+    "dayjs": "^1.11.18",
     "framer-motion": "^12.4.3",
     "lucia": "^3.2.2",
     "mongodb": "^6.16.0",

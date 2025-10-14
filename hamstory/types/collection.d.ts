@@ -5,4 +5,14 @@ export interface User {
   password: string;
   profile_image_public_id: string;
   profile_image_url: string;
+  blog_id: string;
+}
+
+export interface Blog {
+  _id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
 }
