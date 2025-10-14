@@ -12,9 +12,11 @@ import { toast } from "react-toastify";
 import FullArrowIcon from "@/assets/images/icons/FullArrowIcon";
 import profile_default_darkmode from "@/assets/images/icons/profile_default_darkmode.svg";
 
+import { User } from "@/types/collection";
+
 import styles from "./ProfileDropdown.module.scss";
 
-export default function ProfileDropdown({ userId }: { userId: string }) {
+export default function ProfileDropdown({ userInfo }: { userInfo: User }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -62,7 +64,7 @@ export default function ProfileDropdown({ userId }: { userId: string }) {
         className={styles.header_profile_button}
       >
         <Image
-          src={profile_default_darkmode}
+          src={userInfo.profile_image_url || profile_default_darkmode}
           alt="프로필 사진 기본 이미지"
           width={30}
           height={30}
@@ -81,7 +83,7 @@ export default function ProfileDropdown({ userId }: { userId: string }) {
           >
             <Link
               className={styles.header_profile_dropdown_content_item}
-              href={`/${userId}/posts`}
+              href={`/${userInfo._id}/posts`}
             >
               내 블로그
             </Link>
