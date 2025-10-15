@@ -36,22 +36,30 @@ export async function getUserProfile(userId: string) {
 }
 
 // Blog Collection의 정보 조회
-export async function getUserBlog(userId: string): Promise<Blog | null> {
-  const client = new MongoClient(url);
+export async function getUserBlog(userId: string) {
+  return unstable_cache(
+    async function getUserBlog(): Promise<Blog | null> {
+      const client = new MongoClient(url);
 
-  await client.connect();
+      await client.connect();
 
-  try {
-    const db = client.db("hamstory");
-    const collection = db.collection<Blog>("blogs");
+      try {
+        const db = client.db("hamstory");
+        const collection = db.collection<Blog>("blogs");
 
-    const blog = await collection.findOne({ user_id: userId });
+        const blog = await collection.findOne({ user_id: userId });
 
-    return blog;
-  } catch (error) {
-    console.error("Error fetching user blog:", error);
-    return null;
-  } finally {
-    client.close();
-  }
+        return blog;
+      } catch (error) {
+        console.error("Error fetching user blog:", error);
+        return null;
+      } finally {
+        client.close();
+      }
+    },
+    ["blog", userId],
+    {
+      revalidate: 60 * 5,
+    },
+  )();
 }
