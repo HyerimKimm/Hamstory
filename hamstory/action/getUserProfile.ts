@@ -1,30 +1,38 @@
 "use server";
 
+import { unstable_cache } from "next/cache";
+
 import { MongoClient } from "mongodb";
 
 import { Blog, User } from "@/types/collection";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
-// User Collection의 정보 조회
-export default async function getUserProfile(
-  userId: string,
-): Promise<User | null> {
-  const client = new MongoClient(url);
+export async function getUserProfile(userId: string) {
+  return unstable_cache(
+    async function getUserProfile(): Promise<User | null> {
+      const client = new MongoClient(url);
 
-  await client.connect();
+      await client.connect();
+      console.log("getUserProfile 실행됨");
 
-  try {
-    const db = client.db("hamstory");
-    // Collection을 User 타입으로 타입 지정
-    const collection = db.collection<User>("users");
+      try {
+        const db = client.db("hamstory");
+        // Collection을 User 타입으로 타입 지정
+        const collection = db.collection<User>("users");
 
-    const user = await collection.findOne({ _id: userId });
+        const user = await collection.findOne({ _id: userId });
 
-    return user;
-  } finally {
-    client.close();
-  }
+        return user;
+      } finally {
+        client.close();
+      }
+    },
+    ["user", userId],
+    {
+      revalidate: 60 * 5,
+    },
+  )();
 }
 
 // Blog Collection의 정보 조회

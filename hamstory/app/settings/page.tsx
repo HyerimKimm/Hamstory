@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import getUserProfile, { getUserBlog } from "@/action/getUserProfile";
+import { getUserBlog, getUserProfile } from "@/action/getUserProfile";
 import { verifyAuth } from "@/lib/user/auth";
 
 import ProfileForm from "@/components/settings/ProfileForm";
@@ -23,7 +23,6 @@ export default async function SettingsPage({
 
   // 이제 session.data가 존재함이 보장됨
   const userInfo = await getUserProfile(session.data.user.id);
-
   const blogInfo = await getUserBlog(session.data.user.id);
 
   return (
