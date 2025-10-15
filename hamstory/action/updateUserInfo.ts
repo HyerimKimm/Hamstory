@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
+
 import { MongoClient } from "mongodb";
 
 import { User } from "@/types/collection";
@@ -33,6 +35,8 @@ export async function updateUserNickname(userId: string, nickname: string) {
     );
 
     if (result.acknowledged) {
+      // 사용자 프로필 캐시 무효화
+      revalidateTag("users");
       return { success: true, message: "닉네임 수정에 성공했습니다." };
     } else {
       return { success: false, message: "닉네임 수정에 실패했습니다." };
@@ -74,6 +78,8 @@ export async function updateUserEmail(userId: string, email: string) {
     );
 
     if (result.acknowledged) {
+      // 사용자 프로필 캐시 무효화
+      revalidateTag("users");
       return { success: true, message: "이메일 수정에 성공했습니다." };
     } else {
       return { success: false, message: "이메일 수정에 실패했습니다." };

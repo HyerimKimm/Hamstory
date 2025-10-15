@@ -28,9 +28,10 @@ export async function getUserProfile(userId: string) {
         client.close();
       }
     },
-    ["user", userId],
+    ["user", userId], // 동일한 키는 같은 캐시를 사용
     {
       revalidate: 60 * 5,
+      tags: ["users", "profiles"], // 캐시 무효화를 위한 그룹핑
     },
   )();
 }
