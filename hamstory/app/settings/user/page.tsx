@@ -8,7 +8,7 @@ import ProfileForm from "@/components/settings/ProfileForm";
 
 import styles from "./page.module.scss";
 
-export default async function SettingsPage({
+export default async function UserSettingPage({
   params,
 }: {
   params: {

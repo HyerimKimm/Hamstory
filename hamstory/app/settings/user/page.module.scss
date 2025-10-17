@@ -1,0 +1,8 @@
+@use "variables";
+@use "mixin";
+
+.page_wrap {
+  max-width: variables.$mobile;
+  margin: 0 auto;
+  @include mixin.flex(column, flex-start, center, 20px, null);
+}

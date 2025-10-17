@@ -89,7 +89,7 @@ export default function ProfileDropdown({ userInfo }: { userInfo: User }) {
             </Link>
             <Link
               className={styles.header_profile_dropdown_content_item}
-              href="/settings"
+              href="/settings/user"
             >
               설정
             </Link>
