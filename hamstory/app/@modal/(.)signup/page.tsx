@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import signup from "@/action/signup";
+import signup from "@/action/user/signup";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 

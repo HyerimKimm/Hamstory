@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { getUserProfile } from "@/action/getUserProfile";
+import { getUserProfile } from "@/action/user/getUserProfile";
 import { verifyAuth } from "@/lib/user/auth";
 
 import logo from "@/assets/images/logos/logo.svg";

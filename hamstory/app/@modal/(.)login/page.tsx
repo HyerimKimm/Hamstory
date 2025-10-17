@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import login from "@/action/login";
+import login from "@/action/user/login";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "react-toastify";

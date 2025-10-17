@@ -2,8 +2,8 @@
 
 import { MongoClient } from "mongodb";
 
-import { createAuthSession } from "../lib/user/auth";
-import { verifyPassword } from "../lib/user/hash";
+import { createAuthSession } from "../../lib/user/auth";
+import { verifyPassword } from "../../lib/user/hash";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 

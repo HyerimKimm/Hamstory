@@ -2,12 +2,15 @@
 
 import Image from "next/image";
 
-import { updateUserEmail, updateUserNickname } from "@/action/updateUserInfo";
+import {
+  updateUserEmail,
+  updateUserNickname,
+} from "@/action/user/updateUserInfo";
 import {
   deleteCloudinaryImage,
   updateUserProfileImage,
   uploadImageToCloudinary,
-} from "@/action/updateUserProfileImage";
+} from "@/action/user/updateUserProfileImage";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 

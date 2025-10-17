@@ -1,6 +1,6 @@
 "use server";
 
-import { destroyAuthSession } from "../lib/user/auth";
+import { destroyAuthSession } from "../../lib/user/auth";
 
 export default async function logout() {
   const result = await destroyAuthSession();
