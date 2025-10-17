@@ -1,13 +1,13 @@
 const TAGS = {
   users: {
-    tags: (userId: string) => ["users", userId],
+    tags: (userId: string) => ["user", userId],
     revalidate: 60 * 5,
-    revalidateTag: ["users", "profiles"],
+    revalidateTag: ["user"],
   },
   blogs: {
-    tags: (userId: string) => ["blogs", userId],
+    tags: (userId: string) => ["blog", userId],
     revalidate: 60 * 5,
-    revalidateTag: ["blogs"],
+    revalidateTag: ["blog"],
   },
 };
 

@@ -23,7 +23,7 @@ export async function getUserProfile(userId: string) {
         const collection = db.collection<User>("users");
 
         const user = await collection.findOne({ _id: userId });
-
+        console.log("getUserProfile 실행됨");
         return user;
       } finally {
         client.close();

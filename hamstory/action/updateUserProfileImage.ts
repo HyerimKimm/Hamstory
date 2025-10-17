@@ -97,7 +97,7 @@ export async function updateUserProfileImage(
     );
 
     // 사용자 프로필 캐시 무효화
-    revalidateTag("users");
+    revalidateTag("user");
 
     return {
       success: true,
