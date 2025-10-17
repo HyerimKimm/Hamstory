@@ -37,13 +37,8 @@ export default function ProfileForm({
     publicId: initialData.profile_image_public_id,
     url: initialData.profile_image_url,
   });
-
   const [nickname, setNickname] = useState(initialData.nickname);
   const [email, setEmail] = useState(initialData.email);
-  const [blogTitle, setBlogTitle] = useState(initialData.blog_title);
-  const [blogDescription, setBlogDescription] = useState(
-    initialData.blog_description,
-  );
 
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -207,24 +202,6 @@ export default function ProfileForm({
             className={styles.main_bg_button}
             onClick={handleEmailUpdate}
           >
-            수정
-          </button>
-        </div>
-      </div>
-
-      {/* 블로그 제목 */}
-      <div className={styles.input_wrap}>
-        <label htmlFor="blog_title">블로그 제목</label>
-        <div className={styles.info}>
-          <input
-            type="text"
-            name="blog_title"
-            className={styles.input}
-            placeholder="블로그 제목"
-            defaultValue={initialData.blog_title}
-            onChange={(e) => setBlogTitle(e.target.value)}
-          />
-          <button type="button" className={styles.main_bg_button}>
             수정
           </button>
         </div>

@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
+
 import { v2 as cloudinary } from "cloudinary";
 import { MongoClient } from "mongodb";
 
@@ -93,6 +95,9 @@ export async function updateUserProfileImage(
         },
       },
     );
+
+    // 사용자 프로필 캐시 무효화
+    revalidateTag("users");
 
     return {
       success: true,

@@ -2,19 +2,20 @@
 
 import { unstable_cache } from "next/cache";
 
+import TAGS from "@/action/config/tags";
 import { MongoClient } from "mongodb";
 
 import { Blog, User } from "@/types/collection";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
+/* 사용자 정보(users collection) 조회 */
 export async function getUserProfile(userId: string) {
   return unstable_cache(
     async function getUserProfile(): Promise<User | null> {
       const client = new MongoClient(url);
 
       await client.connect();
-      console.log("getUserProfile 실행됨");
 
       try {
         const db = client.db("hamstory");
@@ -28,10 +29,10 @@ export async function getUserProfile(userId: string) {
         client.close();
       }
     },
-    ["user", userId], // 동일한 키는 같은 캐시를 사용
+    TAGS.users.tags(userId), // 동일한 키는 같은 캐시를 사용
     {
-      revalidate: 60 * 5,
-      tags: ["users", "profiles"], // 캐시 무효화를 위한 그룹핑
+      revalidate: TAGS.users.revalidate,
+      tags: TAGS.users.revalidateTag, // 캐시 무효화를 위한 그룹핑
     },
   )();
 }
@@ -58,9 +59,10 @@ export async function getUserBlog(userId: string) {
         client.close();
       }
     },
-    ["blog", userId],
+    TAGS.blogs.tags(userId),
     {
-      revalidate: 60 * 5,
+      revalidate: TAGS.blogs.revalidate,
+      tags: TAGS.blogs.revalidateTag,
     },
   )();
 }
