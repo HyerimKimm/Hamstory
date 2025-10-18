@@ -1,4 +1,6 @@
-import Link from "next/link";
+import { headers } from "next/headers";
+
+import SettingTab from "@/components/setting/SettingTab";
 
 export default function SettingsLayout({
   children,
@@ -6,12 +8,9 @@ export default function SettingsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <div>
-        <Link href="/settings/user">내 정보 관리</Link>
-        <Link href="/settings/blog">블로그 관리</Link>
-      </div>
+    <main>
+      <SettingTab />
       {children}
-    </div>
+    </main>
   );
 }

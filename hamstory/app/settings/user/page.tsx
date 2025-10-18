@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getUserBlog, getUserProfile } from "@/action/user/getUserProfile";
 import { verifyAuth } from "@/lib/user/auth";
 
-import ProfileForm from "@/components/settings/ProfileForm";
+import ProfileForm from "@/components/setting/ProfileForm";
 
 import styles from "./page.module.scss";
 
@@ -26,7 +26,7 @@ export default async function UserSettingPage({
   const blogInfo = await getUserBlog(session.data.user.id);
 
   return (
-    <main className={styles.page_wrap}>
+    <div className={styles.page_wrap}>
       <ProfileForm
         initialData={{
           userId: session.data.user.id,
@@ -38,6 +38,6 @@ export default async function UserSettingPage({
           blog_description: blogInfo?.description || "",
         }}
       />
-    </main>
+    </div>
   );
 }

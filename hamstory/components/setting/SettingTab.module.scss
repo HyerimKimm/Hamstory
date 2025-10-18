@@ -1,0 +1,17 @@
+@use "variables";
+@use "mixin";
+
+.tab_wrap {
+  width: 100%;
+  @include mixin.flex(row, center, center, 0, null);
+}
+
+.tab_item {
+  padding: 8px 16px;
+  @include mixin.font(variables.$fn, 400, variables.$grey05, null);
+
+  &.active {
+    @include mixin.font(variables.$fn, 400, variables.$white, null);
+    border-bottom: 3px solid variables.$brand01;
+  }
+}
