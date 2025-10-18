@@ -84,12 +84,14 @@ export default function ProfileDropdown({ userInfo }: { userInfo: User }) {
             <Link
               className={styles.header_profile_dropdown_content_item}
               href={`/${userInfo._id}/posts`}
+              onClick={() => setIsOpen(false)}
             >
               내 블로그
             </Link>
             <Link
               className={styles.header_profile_dropdown_content_item}
               href="/settings/user"
+              onClick={() => setIsOpen(false)}
             >
               설정
             </Link>
