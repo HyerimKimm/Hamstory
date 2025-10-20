@@ -23,7 +23,6 @@ export default async function UserSettingPage({
 
   // 이제 session.data가 존재함이 보장됨
   const userInfo = await getUserProfile(session.data.user.id);
-  const blogInfo = await getUserBlog(session.data.user.id);
 
   return (
     <div className={styles.page_wrap}>
@@ -34,8 +33,6 @@ export default async function UserSettingPage({
           profile_image_public_id: userInfo?.profile_image_public_id || "",
           profile_image_url: userInfo?.profile_image_url || "",
           email: userInfo?.email || "",
-          blog_title: blogInfo?.title || "",
-          blog_description: blogInfo?.description || "",
         }}
       />
     </div>

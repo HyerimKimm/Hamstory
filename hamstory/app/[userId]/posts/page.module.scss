@@ -1,0 +1,15 @@
+@use "variables";
+@use "mixin";
+
+.page_wrap {
+  max-width: variables.$mobile;
+  margin: 0 auto;
+  @include mixin.flex(column, flex-start, center, 20px, null);
+}
+
+.profile_image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}

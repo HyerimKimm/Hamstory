@@ -27,8 +27,6 @@ export default function ProfileForm({
     profile_image_public_id: string;
     profile_image_url: string;
     email: string;
-    blog_title: string;
-    blog_description: string;
   };
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
