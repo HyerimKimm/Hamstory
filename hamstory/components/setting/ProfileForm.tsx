@@ -43,7 +43,13 @@ export default function ProfileForm({
   const [nickname, setNickname] = useState(initialData.nickname);
   const [email, setEmail] = useState(initialData.email);
 
+  const [isProfileImageLoading, setIsProfileImageLoading] = useState(false);
+  const [isNicknameLoading, setIsNicknameLoading] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
+
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setIsProfileImageLoading(true);
+
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -86,9 +92,13 @@ export default function ProfileForm({
       console.error("이미지 업로드 에러:", error);
       toast.error("이미지 업로드에 실패했습니다.");
     }
+
+    setIsProfileImageLoading(false);
   }
 
   async function handleImageDelete() {
+    setIsProfileImageLoading(true);
+
     const result = await deleteCloudinaryImage(profileImage.publicId);
 
     if (result.success) {
@@ -101,9 +111,12 @@ export default function ProfileForm({
     } else {
       toast.error(result.message);
     }
+
+    setIsProfileImageLoading(false);
   }
 
   async function handleNicknameUpdate() {
+    setIsNicknameLoading(true);
     const result = await updateUserNickname(initialData.userId, nickname);
 
     if (result.success) {
@@ -111,9 +124,11 @@ export default function ProfileForm({
     } else {
       toast.error(result.message);
     }
+    setIsNicknameLoading(false);
   }
 
   async function handleEmailUpdate() {
+    setIsEmailLoading(true);
     const result = await updateUserEmail(initialData.userId, email);
 
     if (result.success) {
@@ -121,6 +136,8 @@ export default function ProfileForm({
     } else {
       toast.error(result.message);
     }
+
+    setIsEmailLoading(false);
   }
 
   return (
@@ -143,6 +160,7 @@ export default function ProfileForm({
                 fileInputRef.current.click();
               }
             }}
+            disabled={isProfileImageLoading}
             className={`${styles.non_bg_button} ${styles.main}`}
           >
             이미지 업로드
@@ -151,6 +169,7 @@ export default function ProfileForm({
             type="button"
             className={`${styles.non_bg_button} ${styles.white}`}
             onClick={handleImageDelete}
+            disabled={isProfileImageLoading}
           >
             이미지 삭제
           </button>
@@ -182,6 +201,7 @@ export default function ProfileForm({
             type="button"
             className={styles.main_bg_button}
             onClick={handleNicknameUpdate}
+            disabled={isNicknameLoading}
           >
             수정
           </button>
@@ -199,6 +219,7 @@ export default function ProfileForm({
             defaultValue={initialData.email}
             className={styles.input}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={isEmailLoading}
           />
           <button
             type="button"
