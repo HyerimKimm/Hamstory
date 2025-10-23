@@ -11,9 +11,7 @@ import styles from "./page.module.scss";
 export default async function UserSettingPage({
   params,
 }: {
-  params: {
-    userId: string;
-  };
+  params: Promise<{ userId: string }>;
 }) {
   const session = await verifyAuth();
 

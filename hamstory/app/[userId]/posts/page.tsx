@@ -1,15 +1,13 @@
 import Image from "next/image";
-import { redirect } from "next/navigation";
 
 import { getUserBlog, getUserProfile } from "@/action/user/getUserProfile";
-import { verifyAuth } from "@/lib/user/auth";
 
 import styles from "./page.module.scss";
 
 export default async function PostListPage({
   params,
 }: {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }) {
   const { userId } = await params;
 

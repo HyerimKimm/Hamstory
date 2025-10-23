@@ -8,9 +8,9 @@ import styles from "./page.module.scss";
 export default async function BlogSettingPage({
   params,
 }: {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }) {
   const session = await verifyAuth();
 
