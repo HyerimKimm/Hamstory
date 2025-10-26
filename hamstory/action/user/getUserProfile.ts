@@ -5,7 +5,7 @@ import { unstable_cache } from "next/cache";
 import TAGS from "@/action/config/tags";
 import { MongoClient } from "mongodb";
 
-import { Blog, BlogCategory, User } from "@/types/collection";
+import { Blog, User } from "@/types/collection";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
@@ -65,26 +65,4 @@ export async function getUserBlog(userId: string) {
       tags: TAGS.blogs.revalidateTag,
     },
   )();
-}
-
-export async function getBlogCategory(blogId: string) {
-  return unstable_cache(async function getBlogCategory(): Promise<
-    BlogCategory[]
-  > {
-    const client = new MongoClient(url);
-
-    await client.connect();
-
-    try {
-      const db = client.db("blog_categories");
-      const collection = db.collection<BlogCategory>("blog_categories");
-
-      const categories = await collection.find({ blog_id: blogId }).toArray();
-
-      return categories;
-    } catch (error) {
-      console.error("Error fetching blog categories:", error);
-      return [];
-    }
-  });
 }

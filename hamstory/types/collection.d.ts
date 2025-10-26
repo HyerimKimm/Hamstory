@@ -17,10 +17,12 @@ export interface Blog {
   updated_at: string;
 }
 
-export interface BlogCategory {
+export interface Post {
   _id: string;
   blog_id: string;
-  name: string;
+  user_id: string;
+  title: string;
+  content: string;
   created_at: string;
   updated_at: string;
 }

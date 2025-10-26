@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { getPosts } from "@/action/post/getPosts";
 import { getUserBlog, getUserProfile } from "@/action/user/getUserProfile";
 
 import defaultProfileImage from "@/assets/images/icons/profile_default_darkmode.svg";
@@ -16,6 +17,7 @@ export default async function PostListPage({
 
   const userInfo = await getUserProfile(userId);
   const blogInfo = await getUserBlog(userId);
+  const posts = await getPosts(userId);
 
   return (
     <main className={styles.page_wrap}>
