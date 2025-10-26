@@ -1,0 +1,7 @@
+@use "variables";
+@use "mixin";
+
+.page_wrap {
+  width: 100vw;
+  @include mixin.flex(column, center, center, 20px, null);
+}

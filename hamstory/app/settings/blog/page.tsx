@@ -22,5 +22,5 @@ export default async function BlogSettingPage({
   const userInfo = await getUserProfile(session.data.user.id);
   const blogInfo = await getUserBlog(session.data.user.id);
 
-  return <main className={styles.page_wrap}>블로그 관리</main>;
+  return <div className={styles.content_wrap}>블로그 관리</div>;
 }

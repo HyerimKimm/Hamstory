@@ -2,9 +2,58 @@
 @use "mixin";
 
 .page_wrap {
+  width: 100vw;
+  @include mixin.flex(column, center, center, null, null);
+}
+
+.blog_info_wrap {
+  width: 100%;
+  padding: 20px 8px;
+  @include mixin.flex(column, center, center, 12px, null);
+
+  > .title {
+    text-align: center;
+    white-space: pre-wrap;
+    max-width: variables.$mobile;
+    @include mixin.font(variables.$fh1, 600, variables.$white, null);
+  }
+
+  > .description {
+    text-align: center;
+    white-space: pre-wrap;
+    max-width: variables.$mobile;
+    @include mixin.font(variables.$fl, 400, variables.$white, null);
+  }
+}
+
+.profile_info_wrap {
+  width: 100%;
   max-width: variables.$mobile;
-  margin: 0 auto;
-  @include mixin.flex(column, flex-start, center, 20px, null);
+  padding: 12px 8px;
+  @include mixin.flex(row, flex-start, center, 12px, null);
+  border-bottom: 1px solid variables.$grey06;
+  border-top: 1px solid variables.$grey06;
+}
+
+.profile_info_text_wrap {
+  flex: 1;
+  height: 100%;
+  @include mixin.flex(column, center, flex-start, 8px, 1);
+
+  > .nickname {
+    width: 100%;
+    text-align: left;
+    white-space: pre-wrap;
+    @include mixin.font(variables.$fl, 500, variables.$white, null);
+  }
+
+  > .email {
+    width: 100%;
+    text-align: left;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    @include mixin.font(variables.$fn, 400, variables.$grey04, null);
+  }
 }
 
 .profile_image {

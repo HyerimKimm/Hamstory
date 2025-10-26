@@ -1,8 +1,8 @@
 @use "variables";
 @use "mixin";
 
-.page_wrap {
+.content_wrap {
   max-width: variables.$mobile;
-  margin: 0 auto;
+  width: 100%;
   @include mixin.flex(column, flex-start, center, 20px, null);
 }

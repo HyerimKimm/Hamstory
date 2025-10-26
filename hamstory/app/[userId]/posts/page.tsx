@@ -2,8 +2,11 @@ import Image from "next/image";
 
 import { getUserBlog, getUserProfile } from "@/action/user/getUserProfile";
 
+import defaultProfileImage from "@/assets/images/icons/profile_default_darkmode.svg";
+
 import styles from "./page.module.scss";
 
+/* 특정 유저의 블로그 */
 export default async function PostListPage({
   params,
 }: {
@@ -16,36 +19,24 @@ export default async function PostListPage({
 
   return (
     <main className={styles.page_wrap}>
-      <div>
-        <h1>{blogInfo?.title}</h1>
-        <p>{blogInfo?.description}</p>
-      </div>
+      <section className={styles.blog_info_wrap}>
+        <h1 className={styles.title}>{blogInfo?.title}</h1>
+        <p className={styles.description}>{blogInfo?.description}</p>
+      </section>
 
-      <div>
-        {userInfo?.profile_image_url ? (
-          <Image
-            src={userInfo.profile_image_url}
-            alt="profile image"
-            width={100}
-            height={100}
-            className={styles.profile_image}
-          />
-        ) : (
-          <div
-            className={styles.profile_image}
-            style={{
-              backgroundColor: "#ccc",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            No Image
-          </div>
-        )}
-        <div>{userInfo?.nickname}</div>
-        <div>{userInfo?.email}</div>
-      </div>
+      <section className={styles.profile_info_wrap}>
+        <Image
+          src={userInfo?.profile_image_url || defaultProfileImage}
+          alt="profile image"
+          width={100}
+          height={100}
+          className={styles.profile_image}
+        />
+        <div className={styles.profile_info_text_wrap}>
+          <span className={styles.nickname}>{userInfo?.nickname}</span>
+          <span className={styles.email}>{userInfo?.email}</span>
+        </div>
+      </section>
     </main>
   );
 }

@@ -23,7 +23,7 @@ export default async function UserSettingPage({
   const userInfo = await getUserProfile(session.data.user.id);
 
   return (
-    <div className={styles.page_wrap}>
+    <div className={styles.content_wrap}>
       <ProfileForm
         initialData={{
           userId: session.data.user.id,
