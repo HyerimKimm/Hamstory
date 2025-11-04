@@ -92,7 +92,7 @@
   border-radius: 4px;
   padding: 0 16px;
   @include mixin.font(variables.$fn, 500, null, null);
-  transition: color 0.3s ease;
+  transition: color 0.15s ease;
   white-space: nowrap;
 
   &.main {

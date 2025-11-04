@@ -84,7 +84,7 @@
   border-radius: 4px;
   padding: 0 16px;
   @include mixin.font(variables.$fn, 500, null, null);
-  transition: color 0.3s ease;
+  transition: color 0.15s ease;
   white-space: nowrap;
 
   &.main {
@@ -118,10 +118,17 @@
     text-align: left;
     @include mixin.font(variables.$fn, 400, variables.$grey04, null);
   }
+}
 
-  > .delete_button {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+.icon_button {
+  width: 30px;
+  height: 30px;
+  @include mixin.flex(row, center, center, 0, null);
+  border-radius: 50%;
+  color: variables.$brand01Light;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: variables.$brand01;
   }
 }

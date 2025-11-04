@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
-
 import { addBlogCategory } from "@/action/blog/addBlogCategory";
 import { deleteBlogCategory } from "@/action/blog/deleteBlogCategory";
 
-import deleteIcon from "@/assets/images/icons/delete_icon.svg";
+import AddIcon from "@/assets/images/icons/AddIcon";
+import DeleteIcon from "@/assets/images/icons/DeleteIcon";
 
 import { Category } from "@/types/collection";
 
@@ -60,18 +59,14 @@ export default function BlogForm({
                 <span className={styles.category_name}>{category.name}</span>
                 <button
                   type="button"
-                  className={styles.delete_button}
+                  className={styles.icon_button}
+                  title="카테고리 삭제"
+                  aria-label="카테고리 삭제"
                   onClick={() => {
                     deleteBlogCategory(category._id);
                   }}
                 >
-                  <Image
-                    src={deleteIcon}
-                    priority
-                    alt="delete"
-                    width={16}
-                    height={16}
-                  />
+                  <DeleteIcon width={24} height={24} />
                 </button>
               </li>
             ))}
@@ -79,12 +74,13 @@ export default function BlogForm({
         </div>
         <button
           type="button"
-          className={styles.main_bg_button}
+          title="카테고리 추가"
+          className={styles.icon_button}
           onClick={() => {
             addBlogCategory(initialData.blogId, "새 카테고리");
           }}
         >
-          +
+          <AddIcon width={24} height={24} />
         </button>
       </div>
     </form>
