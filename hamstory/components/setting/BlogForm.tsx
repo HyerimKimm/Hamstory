@@ -1,7 +1,11 @@
 "use client";
 
+import Image from "next/image";
+
 import { addBlogCategory } from "@/action/blog/addBlogCategory";
 import { deleteBlogCategory } from "@/action/blog/deleteBlogCategory";
+
+import deleteIcon from "@/assets/images/icons/delete_icon.svg";
 
 import { Category } from "@/types/collection";
 
@@ -61,7 +65,13 @@ export default function BlogForm({
                     deleteBlogCategory(category._id);
                   }}
                 >
-                  -
+                  <Image
+                    src={deleteIcon}
+                    priority
+                    alt="delete"
+                    width={16}
+                    height={16}
+                  />
                 </button>
               </li>
             ))}
