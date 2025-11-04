@@ -1,7 +1,6 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
-import { getUserBlog, getUserProfile } from "@/action/user/getUserProfile";
+import { getUserProfile } from "@/action/user/getUserProfile";
 import { verifyAuth } from "@/lib/user/auth";
 
 import ProfileForm from "@/components/setting/ProfileForm";

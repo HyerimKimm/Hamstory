@@ -1,0 +1,105 @@
+@use "variables";
+@use "mixin";
+
+.form_wrap {
+  width: 100%;
+  @include mixin.flex(column, center, center, 0, null);
+}
+
+.input_wrap {
+  width: 100%;
+  @include mixin.flex(row, center, center, 20px, null);
+  padding: 20px;
+  border-bottom: 1px solid variables.$grey06;
+
+  > label {
+    width: 100px;
+    text-align: left;
+    @include mixin.font(variables.$fn, 400, variables.$grey04, null);
+  }
+
+  > .info {
+    flex: 1;
+    @include mixin.flex(row, flex-start, center, 12px, null);
+  }
+
+  // 모바일에서 세로 배치로 변경
+  @media (max-width: variables.$mobile) {
+    @include mixin.flex(column, flex-start, center, 12px, null);
+
+    > label {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    > .info {
+      flex: none;
+      width: 100%;
+    }
+  }
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid variables.$grey05;
+  padding: 0 16px;
+  background-color: variables.$grey06;
+  @include mixin.font(variables.$fn, 400, variables.$grey04, null);
+
+  &::placeholder {
+    @include mixin.font(variables.$fn, 400, variables.$grey05, null);
+  }
+}
+
+.textarea {
+  width: 100%;
+  height: 100px;
+  border-radius: 4px;
+  border: 1px solid variables.$grey05;
+  padding: 12px;
+  background-color: variables.$grey06;
+  @include mixin.font(variables.$fn, 400, variables.$grey04, null);
+  resize: none;
+}
+
+.main_bg_button {
+  height: 32px;
+  border-radius: 4px;
+  padding: 0 16px;
+  background-color: variables.$brand01Light;
+  @include mixin.font(variables.$fn, 500, variables.$black, null);
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: variables.$brand01;
+  }
+}
+
+.non_bg_button {
+  height: 32px;
+  border-radius: 4px;
+  padding: 0 16px;
+  @include mixin.font(variables.$fn, 500, null, null);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+
+  &.main {
+    color: variables.$brand01Light;
+
+    &:hover {
+      color: variables.$brand01;
+    }
+  }
+
+  &.white {
+    color: variables.$white;
+
+    &:hover {
+      color: variables.$grey05;
+    }
+  }
+}

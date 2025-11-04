@@ -1,6 +1,7 @@
 import Image from "next/image";
 
-import { getUserBlog, getUserProfile } from "@/action/user/getUserProfile";
+import { getUserBlog } from "@/action/blog/getUserBlog";
+import { getUserProfile } from "@/action/user/getUserProfile";
 
 import defaultProfileImage from "@/assets/images/icons/profile_default_darkmode.svg";
 
