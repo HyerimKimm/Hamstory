@@ -9,6 +9,11 @@ const TAGS = {
     revalidate: 60 * 5,
     revalidateTag: ["blog"],
   },
+  categories: {
+    tags: (blogId: string) => ["category", blogId],
+    revalidate: 60 * 5,
+    revalidateTag: ["category"],
+  },
 };
 
 export default TAGS;

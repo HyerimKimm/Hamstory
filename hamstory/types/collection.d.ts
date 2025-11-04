@@ -17,7 +17,7 @@ export interface Blog {
   updated_at: string;
 }
 
-export interface BlogCategory {
+export interface Category {
   _id: string;
   blog_id: string;
   name: string;

@@ -5,7 +5,7 @@ import { unstable_cache } from "next/cache";
 import TAGS from "@/action/config/tags";
 import { MongoClient } from "mongodb";
 
-import { Blog, BlogCategory, User } from "@/types/collection";
+import { Blog, Category, User } from "@/types/collection";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
@@ -24,6 +24,7 @@ export async function getUserProfile(userId: string) {
 
         const user = await collection.findOne({ _id: userId });
         console.log("getUserProfile 실행됨");
+        console.log(userId);
         return user;
       } finally {
         client.close();
@@ -67,24 +68,32 @@ export async function getUserBlog(userId: string) {
   )();
 }
 
+// 블로그 아이디로 블로그 카테고리 조회하기
 export async function getBlogCategory(blogId: string) {
-  return unstable_cache(async function getBlogCategory(): Promise<
-    BlogCategory[]
-  > {
-    const client = new MongoClient(url);
+  return unstable_cache(
+    async function getBlogCategory(): Promise<Category[]> {
+      const client = new MongoClient(url);
 
-    await client.connect();
+      await client.connect();
 
-    try {
-      const db = client.db("blog_categories");
-      const collection = db.collection<BlogCategory>("blog_categories");
+      try {
+        const db = client.db("categories");
+        const collection = db.collection<Category>("categories");
 
-      const categories = await collection.find({ blog_id: blogId }).toArray();
+        const categories = await collection.find({ blog_id: blogId }).toArray();
 
-      return categories;
-    } catch (error) {
-      console.error("Error fetching blog categories:", error);
-      return [];
-    }
-  });
+        return categories;
+      } catch (error) {
+        console.error("Error fetching blog categories:", error);
+        return [];
+      } finally {
+        client.close();
+      }
+    },
+    TAGS.categories.tags(blogId),
+    {
+      revalidate: TAGS.users.revalidate,
+      tags: TAGS.users.revalidateTag, // 캐시 무효화를 위한 그룹핑
+    },
+  )();
 }
