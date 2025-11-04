@@ -103,3 +103,27 @@
     }
   }
 }
+
+.category_list {
+  width: 100%;
+  @include mixin.flex(column, flex-start, center, 12px, null);
+}
+
+.category_item {
+  width: 100%;
+  @include mixin.flex(row, space-between, center, 12px, null);
+
+  > .category_name {
+    flex: 1;
+    text-align: left;
+    @include mixin.font(variables.$fn, 400, variables.$grey04, null);
+  }
+
+  > .delete_button {
+    background-color: variables.$brand01Light;
+    color: variables.$black;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+}

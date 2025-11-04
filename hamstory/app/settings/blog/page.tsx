@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 
 import { getBlogCategory, getUserBlog } from "@/action/blog/getUserBlog";
-import { getUserProfile } from "@/action/user/getUserProfile";
 import { verifyAuth } from "@/lib/user/auth";
 
 import BlogForm from "@/components/setting/BlogForm";
@@ -22,7 +21,6 @@ export default async function BlogSettingPage({
   }
 
   // 이제 session.data가 존재함이 보장됨
-  const userInfo = await getUserProfile(session.data.user.id);
   const blogInfo = await getUserBlog(session.data.user.id);
   const categories = await getBlogCategory(blogInfo?._id || "");
 

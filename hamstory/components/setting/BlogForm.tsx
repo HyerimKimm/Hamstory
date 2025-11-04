@@ -1,6 +1,7 @@
 "use client";
 
 import { addBlogCategory } from "@/action/blog/addBlogCategory";
+import { deleteBlogCategory } from "@/action/blog/deleteBlogCategory";
 
 import { Category } from "@/types/collection";
 
@@ -51,7 +52,18 @@ export default function BlogForm({
         <div className={styles.info}>
           <ul className={styles.category_list}>
             {initialData.categories.map((category: Category) => (
-              <li key={category._id}>{category.name}</li>
+              <li key={category._id} className={styles.category_item}>
+                <span className={styles.category_name}>{category.name}</span>
+                <button
+                  type="button"
+                  className={styles.delete_button}
+                  onClick={() => {
+                    deleteBlogCategory(category._id);
+                  }}
+                >
+                  -
+                </button>
+              </li>
             ))}
           </ul>
         </div>
