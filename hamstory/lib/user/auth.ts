@@ -7,31 +7,95 @@ import { MongoClient } from "mongodb";
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 // Lucia를 위한 전용 클라이언트 (어댑터용)
-const adapterClient = new MongoClient(url);
-await adapterClient.connect();
+let adapterClient: MongoClient | null = null;
+let db: ReturnType<MongoClient["db"]> | null = null;
+let adapter: MongodbAdapter | null = null;
+let luciaInstance: Lucia<MongodbAdapter> | null = null;
 
-const db = adapterClient.db("hamstory");
+// MongoDB 연결 및 어댑터 초기화 함수
+async function initializeAdapter() {
+  if (adapterClient && adapter && luciaInstance) {
+    return { adapter, lucia: luciaInstance };
+  }
 
-/*
-1번째 인수: 세션 컬렉션
-2번째 인수: 유저 컬렉션
-*/
-const adapter = new MongodbAdapter(
-  db.collection("sessions"),
-  db.collection("users"),
-);
+  try {
+    adapterClient = new MongoClient(url, {
+      serverSelectionTimeoutMS: 5000, // 5초 타임아웃
+      connectTimeoutMS: 10000, // 연결 타임아웃 10초
+    });
 
-/* Lucia 인스턴스 생성 */
-export const lucia = new Lucia(adapter, {
-  sessionCookie: {
-    name: "auth_session", // 명시적으로 쿠키 이름 설정
-    expires: false, //  // next.js에서 lucia를 사용할 때는 false로 설정해야 함
-    attributes: {
-      secure: process.env.NODE_ENV === "production", // 프로덕션 환경에서는 https에서만 작동하도록 설정
-      sameSite: "lax", // CSRF 공격 방지
-    },
+    await adapterClient.connect();
+
+    db = adapterClient.db("hamstory");
+
+    adapter = new MongodbAdapter(
+      db.collection("sessions"),
+      db.collection("users"),
+    );
+
+    luciaInstance = new Lucia(adapter, {
+      sessionCookie: {
+        name: "auth_session",
+        expires: false,
+        attributes: {
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+        },
+      },
+    });
+
+    return { adapter, lucia: luciaInstance };
+  } catch (error) {
+    console.error("MongoDB connection failed in auth.ts:", error);
+    throw new Error(
+      "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
+    );
+  }
+}
+
+// Lucia 인스턴스 가져오기 (lazy initialization)
+async function getLucia() {
+  if (!luciaInstance) {
+    await initializeAdapter();
+  }
+  return luciaInstance!;
+}
+
+// Lucia 인스턴스를 lazy하게 export
+export const lucia = {
+  async createSession(userId: string, attributes: {}) {
+    const lucia = await getLucia();
+    return lucia.createSession(userId, attributes);
   },
-});
+  async validateSession(sessionId: string) {
+    const lucia = await getLucia();
+    return lucia.validateSession(sessionId);
+  },
+  async invalidateSession(sessionId: string) {
+    const lucia = await getLucia();
+    return lucia.invalidateSession(sessionId);
+  },
+  createSessionCookie(sessionId: string) {
+    if (!luciaInstance) {
+      throw new Error(
+        "Lucia instance not initialized. Database connection required.",
+      );
+    }
+    return luciaInstance.createSessionCookie(sessionId);
+  },
+  createBlankSessionCookie() {
+    if (!luciaInstance) {
+      throw new Error(
+        "Lucia instance not initialized. Database connection required.",
+      );
+    }
+    return luciaInstance.createBlankSessionCookie();
+  },
+  get sessionCookieName() {
+    // 이 경우는 초기화 전에 호출될 수 있으므로 기본값 반환
+    return "auth_session";
+  },
+};
 
 /* 세션 생성 함수 */
 export async function createAuthSession(userId: string) {
@@ -60,81 +124,93 @@ export async function verifyAuth(): Promise<{
     session: Session;
   } | null;
 }> {
-  const sessionCookie = (await cookies()).get(lucia.sessionCookieName);
-
-  if (!sessionCookie) {
-    return {
-      success: false,
-      message: "세션이 존재하지 않습니다.",
-      data: null,
-    };
-  }
-
-  const sessionId = sessionCookie.value;
-
-  if (!sessionId) {
-    return {
-      success: false,
-      message: "세션 아이디가 존재하지 않습니다.",
-      data: null,
-    };
-  }
-
-  const result = await lucia.validateSession(sessionId);
-
   try {
-    /* 활성화 되고 유효한 세션을 찾은 경우 */
-    if (result.session && result.session.fresh) {
-      /* 세션 쿠키 기간 연장 */
-      const sessionCookie = lucia.createSessionCookie(result.session.id);
+    const sessionCookie = (await cookies()).get(lucia.sessionCookieName);
 
-      (await cookies()).set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes,
-      );
+    if (!sessionCookie) {
+      return {
+        success: false,
+        message: "세션이 존재하지 않습니다.",
+        data: null,
+      };
     }
 
-    /* 세션을 찾지 못한 경우 -> 전송된 세션 쿠키를 삭제 */
+    const sessionId = sessionCookie.value;
+
+    if (!sessionId) {
+      return {
+        success: false,
+        message: "세션 아이디가 존재하지 않습니다.",
+        data: null,
+      };
+    }
+
+    const result = await lucia.validateSession(sessionId);
+
+    try {
+      /* 활성화 되고 유효한 세션을 찾은 경우 */
+      if (result.session && result.session.fresh) {
+        /* 세션 쿠키 기간 연장 */
+        const sessionCookie = lucia.createSessionCookie(result.session.id);
+
+        (await cookies()).set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes,
+        );
+      }
+
+      /* 세션을 찾지 못한 경우 -> 전송된 세션 쿠키를 삭제 */
+      if (!result.session || !result.user) {
+        const sessionCookie = lucia.createBlankSessionCookie();
+
+        /* 빈 세션 쿠키를 생성하고 쿠키 저장소에 저장 */
+        (await cookies()).set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes,
+        );
+
+        return {
+          success: false,
+          message: "세션 검증 실패",
+          data: null,
+        };
+      }
+    } catch {
+      /* next.js에서는 페이지 렌더링 과정의 일부에서 쿠키를 설정할 수 없음 */
+      /* 따라서 예외 처리 */
+      /* 예외 처리 시 쿠키 설정 시도를 무시하고 계속 진행 */
+    }
+
+    // 여기 도달했다면 result.session과 result.user가 모두 존재함이 보장됨
     if (!result.session || !result.user) {
-      const sessionCookie = lucia.createBlankSessionCookie();
-
-      /* 빈 세션 쿠키를 생성하고 쿠키 저장소에 저장 */
-      (await cookies()).set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes,
-      );
-
       return {
         success: false,
         message: "세션 검증 실패",
         data: null,
       };
     }
-  } catch {
-    /* next.js에서는 페이지 렌더링 과정의 일부에서 쿠키를 설정할 수 없음 */
-    /* 따라서 예외 처리 */
-    /* 예외 처리 시 쿠키 설정 시도를 무시하고 계속 진행 */
-  }
 
-  // 여기 도달했다면 result.session과 result.user가 모두 존재함이 보장됨
-  if (!result.session || !result.user) {
+    return {
+      success: true,
+      message: "세션 검증 성공",
+      data: {
+        user: result.user,
+        session: result.session,
+      },
+    };
+  } catch (error) {
+    console.error("Authentication error:", error);
     return {
       success: false,
-      message: "세션 검증 실패",
+      message:
+        error instanceof Error
+          ? error.message
+          : "인증 처리 중 오류가 발생했습니다.",
       data: null,
     };
   }
-
-  return {
-    success: true,
-    message: "세션 검증 성공",
-    data: {
-      user: result.user,
-      session: result.session,
-    },
-  };
 }
 
 /* 세션 삭제 함수 */

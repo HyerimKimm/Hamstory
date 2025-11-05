@@ -13,6 +13,11 @@
   object-fit: cover;
 }
 
+.profile_image_button_wrap {
+  width: 100%;
+  @include mixin.flex(row, center, center, 0, null);
+}
+
 .profile_input_wrap {
   width: 100%;
 
@@ -92,6 +97,7 @@
   border-radius: 4px;
   padding: 0 16px;
   @include mixin.font(variables.$fn, 500, null, null);
+  @include mixin.flex(row, center, center, 0, null);
   transition: color 0.15s ease;
   white-space: nowrap;
 
@@ -109,5 +115,9 @@
     &:hover {
       color: variables.$grey05;
     }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 }

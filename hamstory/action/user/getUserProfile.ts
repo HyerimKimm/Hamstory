@@ -13,20 +13,29 @@ const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 export async function getUserProfile(userId: string) {
   return unstable_cache(
     async function getUserProfile(): Promise<User | null> {
-      const client = new MongoClient(url);
-
-      await client.connect();
+      const client = new MongoClient(url, {
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 10000,
+      });
 
       try {
-        const db = client.db("hamstory");
-        // Collection을 User 타입으로 타입 지정
-        const collection = db.collection<User>("users");
+        await client.connect();
 
-        const user = await collection.findOne({ _id: userId });
+        try {
+          const db = client.db("hamstory");
+          // Collection을 User 타입으로 타입 지정
+          const collection = db.collection<User>("users");
 
-        return user;
-      } finally {
-        client.close();
+          const user = await collection.findOne({ _id: userId });
+
+          return user;
+        } finally {
+          client.close();
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        // 연결 실패 시 null 반환 (에러를 throw하지 않음)
+        return null;
       }
     },
     TAGS.users.tags(userId), // 동일한 키는 같은 캐시를 사용

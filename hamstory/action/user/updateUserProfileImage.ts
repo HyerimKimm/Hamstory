@@ -77,41 +77,57 @@ export async function updateUserProfileImage(
   message: string;
   data: string | object | null;
 }> {
-  const client = new MongoClient(url);
-
-  await client.connect();
+  const client = new MongoClient(url, {
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 10000,
+  });
 
   try {
-    const db = client.db("hamstory");
+    await client.connect();
 
-    const usersCollection = db.collection<User>("users");
+    try {
+      const db = client.db("hamstory");
 
-    await usersCollection.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          profile_image_url: imageUrl,
-          profile_image_public_id: publicId,
+      const usersCollection = db.collection<User>("users");
+
+      await usersCollection.updateOne(
+        { _id: userId },
+        {
+          $set: {
+            profile_image_url: imageUrl,
+            profile_image_public_id: publicId,
+          },
         },
-      },
-    );
+      );
 
-    // 사용자 프로필 캐시 무효화
-    revalidateTag("user");
+      // 사용자 프로필 캐시 무효화
+      revalidateTag("user");
 
-    return {
-      success: true,
-      message: "프로필 이미지 업데이트 성공",
-      data: null,
-    };
-  } catch (e) {
+      return {
+        success: true,
+        message: "프로필 이미지 업데이트 성공",
+        data: null,
+      };
+    } catch (e) {
+      console.error("Update profile image error:", e);
+      return {
+        success: false,
+        message: "프로필 이미지 업데이트 실패",
+        data: null,
+      };
+    } finally {
+      client.close();
+    }
+  } catch (error) {
+    console.error("Database connection error:", error);
     return {
       success: false,
-      message: "프로필 이미지 업데이트 실패",
+      message:
+        error instanceof Error && error.message.includes("timeout")
+          ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
+          : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
       data: null,
     };
-  } finally {
-    client.close();
   }
 }
 

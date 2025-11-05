@@ -13,22 +13,27 @@ const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 export async function getUserBlog(userId: string) {
   return unstable_cache(
     async function getUserBlog(): Promise<Blog | null> {
-      const client = new MongoClient(url);
-
-      await client.connect();
+      const client = new MongoClient(url, {
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 10000,
+      });
 
       try {
-        const db = client.db("hamstory");
-        const collection = db.collection<Blog>("blogs");
+        await client.connect();
 
-        const blog = await collection.findOne({ user_id: userId });
+        try {
+          const db = client.db("hamstory");
+          const collection = db.collection<Blog>("blogs");
 
-        return blog;
+          const blog = await collection.findOne({ user_id: userId });
+
+          return blog;
+        } finally {
+          client.close();
+        }
       } catch (error) {
         console.error("Error fetching user blog:", error);
         return null;
-      } finally {
-        client.close();
       }
     },
     TAGS.blogs.tags(userId),
@@ -43,22 +48,29 @@ export async function getUserBlog(userId: string) {
 export async function getBlogCategory(blogId: string) {
   return unstable_cache(
     async function getBlogCategory(): Promise<Category[]> {
-      const client = new MongoClient(url);
-
-      await client.connect();
+      const client = new MongoClient(url, {
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 10000,
+      });
 
       try {
-        const db = client.db("hamstory");
-        const collection = db.collection<Category>("categories");
+        await client.connect();
 
-        const categories = await collection.find({ blog_id: blogId }).toArray();
+        try {
+          const db = client.db("hamstory");
+          const collection = db.collection<Category>("categories");
 
-        return categories;
+          const categories = await collection
+            .find({ blog_id: blogId })
+            .toArray();
+
+          return categories;
+        } finally {
+          client.close();
+        }
       } catch (error) {
         console.error("Error fetching blog categories:", error);
         return [];
-      } finally {
-        client.close();
       }
     },
     TAGS.categories.tags(blogId),

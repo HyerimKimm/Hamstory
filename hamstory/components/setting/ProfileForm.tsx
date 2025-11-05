@@ -14,6 +14,7 @@ import {
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
+import LoadingIndicator from "@/assets/images/icons/LoadingIndicator";
 import defaultProfileImage from "@/assets/images/icons/profile_default_darkmode.svg";
 
 import styles from "./ProfileForm.module.scss";
@@ -49,17 +50,22 @@ export default function ProfileForm({
     setIsProfileImageLoading(true);
 
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      setIsProfileImageLoading(false);
+      return;
+    }
 
     // 파일 크기 체크 (1MB 제한)
     if (file.size > 1 * 1024 * 1024) {
       toast.error("파일 크기는 1MB 이하여야 합니다.");
+      setIsProfileImageLoading(false);
       return;
     }
 
     // 파일 타입 체크
     if (!file.type.startsWith("image/")) {
       toast.error("이미지 파일만 업로드 가능합니다.");
+      setIsProfileImageLoading(false);
       return;
     }
 
@@ -150,7 +156,7 @@ export default function ProfileForm({
           className={styles.profile_image}
         />
         {/* 이미지 업로드 버튼과 삭제 버튼 */}
-        <div>
+        <div className={styles.profile_image_button_wrap}>
           <button
             type="button"
             onClick={() => {
@@ -161,6 +167,9 @@ export default function ProfileForm({
             disabled={isProfileImageLoading}
             className={`${styles.non_bg_button} ${styles.main}`}
           >
+            {isProfileImageLoading && (
+              <LoadingIndicator width={24} height={24} color="white" />
+            )}
             이미지 업로드
           </button>
           <button
@@ -169,6 +178,9 @@ export default function ProfileForm({
             onClick={handleImageDelete}
             disabled={isProfileImageLoading}
           >
+            {isProfileImageLoading && (
+              <LoadingIndicator width={24} height={24} color="white" />
+            )}
             이미지 삭제
           </button>
         </div>
