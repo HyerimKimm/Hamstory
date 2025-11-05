@@ -5,15 +5,11 @@ import { verifyAuth } from "@/lib/user/auth";
 
 import BlogForm from "@/components/setting/BlogForm";
 
+import LoadingIndicator from "@/assets/images/icons/LoadingIndicator";
+
 import styles from "./page.module.scss";
 
-export default async function BlogSettingPage({
-  params,
-}: {
-  params: Promise<{
-    userId: string;
-  }>;
-}) {
+export default async function BlogSettingPage() {
   const session = await verifyAuth();
 
   if (!session.success || !session.data) {

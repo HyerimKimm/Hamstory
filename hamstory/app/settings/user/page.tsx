@@ -7,11 +7,7 @@ import ProfileForm from "@/components/setting/ProfileForm";
 
 import styles from "./page.module.scss";
 
-export default async function UserSettingPage({
-  params,
-}: {
-  params: Promise<{ userId: string }>;
-}) {
+export default async function UserSettingPage() {
   const session = await verifyAuth();
 
   if (!session.success || !session.data) {
