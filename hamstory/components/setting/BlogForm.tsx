@@ -5,6 +5,8 @@ import { deleteBlogCategory } from "@/action/blog/deleteBlogCategory";
 
 import AddIcon from "@/assets/images/icons/AddIcon";
 import DeleteIcon from "@/assets/images/icons/DeleteIcon";
+import DnDIcon from "@/assets/images/icons/DnDIcon";
+import PencilIcon from "@/assets/images/icons/PencilIcon";
 
 import { Category } from "@/types/collection";
 
@@ -47,16 +49,35 @@ export default function BlogForm({
             defaultValue={initialData.description || ""}
             className={styles.textarea}
           />
+          <button type="button" className={styles.main_bg_button}>
+            수정
+          </button>
         </div>
       </div>
       {/* 블로그 카테고리 */}
-      <div className={styles.input_wrap}>
+      <div className={styles.category_wrap}>
         <label htmlFor="category">블로그 카테고리</label>
         <div className={styles.info}>
           <ul className={styles.category_list}>
             {initialData.categories.map((category: Category) => (
               <li key={category._id} className={styles.category_item}>
                 <span className={styles.category_name}>{category.name}</span>
+                <button
+                  type="button"
+                  className={`${styles.icon_button} ${styles.dnd}`}
+                  title="카테고리 순서 변경"
+                  aria-label="카테고리 순서 변경"
+                >
+                  <DnDIcon width={24} height={24} />
+                </button>
+                <button
+                  type="button"
+                  className={styles.icon_button}
+                  title="카테고리 수정"
+                  aria-label="카테고리 수정"
+                >
+                  <PencilIcon width={24} height={24} />
+                </button>
                 <button
                   type="button"
                   className={styles.icon_button}
@@ -70,18 +91,18 @@ export default function BlogForm({
                 </button>
               </li>
             ))}
+            <button
+              type="button"
+              title="카테고리 추가"
+              className={styles.add_category_button}
+              onClick={() => {
+                addBlogCategory(initialData.blogId, "새 카테고리");
+              }}
+            >
+              <AddIcon width={24} height={24} />
+            </button>
           </ul>
         </div>
-        <button
-          type="button"
-          title="카테고리 추가"
-          className={styles.icon_button}
-          onClick={() => {
-            addBlogCategory(initialData.blogId, "새 카테고리");
-          }}
-        >
-          <AddIcon width={24} height={24} />
-        </button>
       </div>
     </form>
   );

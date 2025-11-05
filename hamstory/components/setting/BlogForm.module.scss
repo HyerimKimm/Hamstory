@@ -30,12 +30,12 @@
     > label {
       width: 100%;
       text-align: left;
-      margin-bottom: 10px;
     }
 
     > .info {
       flex: none;
       width: 100%;
+      @include mixin.flex(column, flex-start, flex-start, 12px, null);
     }
   }
 }
@@ -104,15 +104,52 @@
   }
 }
 
+.category_wrap {
+  width: 100%;
+  @include mixin.flex(row, center, flex-start, 20px, null);
+  padding: 20px;
+  border-bottom: 1px solid variables.$grey06;
+
+  > label {
+    width: 100px;
+    text-align: left;
+    @include mixin.font(variables.$fn, 400, variables.$grey04, null);
+  }
+
+  > .info {
+    flex: 1;
+    @include mixin.flex(row, flex-start, center, 12px, null);
+  }
+
+    // 모바일에서 세로 배치로 변경
+    @media (max-width: variables.$mobile) {
+      @include mixin.flex(column, flex-start, center, 12px, null);
+  
+      > label {
+        width: 100%;
+        text-align: left;
+      }
+  
+      > .info {
+        flex: none;
+        width: 100%;
+        @include mixin.flex(column, flex-start, flex-start, 12px, null);
+      }
+    }
+}
+
 .category_list {
   width: 100%;
-  @include mixin.flex(column, flex-start, center, 12px, null);
+  @include mixin.flex(column, flex-start, center, 8px, null);
 }
 
 .category_item {
   width: 100%;
-  @include mixin.flex(row, space-between, center, 12px, null);
-
+  @include mixin.flex(row, space-between, center, 4px, null);
+  background-color: variables.$grey06;
+  border-radius: 4px;
+  padding: 4px 8px 4px 12px;
+  
   > .category_name {
     flex: 1;
     text-align: left;
@@ -128,7 +165,27 @@
   color: variables.$brand01Light;
   transition: color 0.15s ease;
 
+  &.dnd {
+    cursor: grab;
+  }
+
   &:hover {
     color: variables.$brand01;
+  }
+}
+
+.add_category_button {
+  width: 100%;
+  height: 32px;
+  margin-top: 8px;
+  border-radius: 4px;
+  padding: 0 16px;
+  background-color: variables.$brand01Light;
+  @include mixin.font(variables.$fn, 500, variables.$black, null);
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: variables.$brand01;
   }
 }
