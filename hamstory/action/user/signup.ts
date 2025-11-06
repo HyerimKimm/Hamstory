@@ -15,7 +15,11 @@ export default async function signup(
     data: string | object | null;
   },
   formData: FormData,
-) {
+): Promise<{
+  success: boolean;
+  message: string;
+  data: string | object | null;
+}> {
   if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
     return new Promise((resolve) => {
       setTimeout(

@@ -13,7 +13,11 @@ export default async function login(
     data: string | object | null;
   },
   formData: FormData,
-) {
+): Promise<{
+  success: boolean;
+  message: string;
+  data: string | object | null;
+}> {
   const email = formData.get("email");
   const password = formData.get("password");
 

@@ -2,7 +2,11 @@
 
 import { destroyAuthSession } from "@/lib/user/auth";
 
-export default async function logout() {
+export default async function logout(): Promise<{
+  success: boolean;
+  message: string;
+  data: string | object | null;
+}> {
   if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
     return new Promise((resolve) => {
       setTimeout(

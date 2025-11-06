@@ -153,6 +153,11 @@ export async function verifyAuth(): Promise<{
               },
             },
           }),
+        // resolve({
+        //   success: false,
+        //   message: "세션 검증 실패",
+        //   data: null,
+        // }),
         1000,
       );
     });
