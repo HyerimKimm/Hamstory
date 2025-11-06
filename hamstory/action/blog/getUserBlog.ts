@@ -13,27 +13,42 @@ const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 export async function getUserBlog(userId: string) {
   return unstable_cache(
     async function getUserBlog(): Promise<Blog | null> {
-      const client = new MongoClient(url, {
-        serverSelectionTimeoutMS: 5000,
-        connectTimeoutMS: 10000,
-      });
-
-      try {
-        await client.connect();
+      if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            return resolve({
+              _id: "blog1",
+              user_id: "user1",
+              title: "test",
+              description: "test",
+              created_at: "2025-01-01 00:00:00",
+              updated_at: "2025-01-01 00:00:00",
+            });
+          }, 1000);
+        });
+      } else {
+        const client = new MongoClient(url, {
+          serverSelectionTimeoutMS: 5000,
+          connectTimeoutMS: 10000,
+        });
 
         try {
-          const db = client.db("hamstory");
-          const collection = db.collection<Blog>("blogs");
+          await client.connect();
 
-          const blog = await collection.findOne({ user_id: userId });
+          try {
+            const db = client.db("hamstory");
+            const collection = db.collection<Blog>("blogs");
 
-          return blog;
-        } finally {
-          client.close();
+            const blog = await collection.findOne({ user_id: userId });
+
+            return blog;
+          } finally {
+            client.close();
+          }
+        } catch (error) {
+          console.error("Error fetching user blog:", error);
+          return null;
         }
-      } catch (error) {
-        console.error("Error fetching user blog:", error);
-        return null;
       }
     },
     TAGS.blogs.tags(userId),
@@ -48,29 +63,45 @@ export async function getUserBlog(userId: string) {
 export async function getBlogCategory(blogId: string) {
   return unstable_cache(
     async function getBlogCategory(): Promise<Category[]> {
-      const client = new MongoClient(url, {
-        serverSelectionTimeoutMS: 5000,
-        connectTimeoutMS: 10000,
-      });
-
-      try {
-        await client.connect();
+      if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve([
+              {
+                _id: "category1",
+                blog_id: "blog1",
+                name: "일상",
+                created_at: "2025-01-01 00:00:00",
+                updated_at: "2025-01-01 00:00:00",
+              },
+            ]);
+          }, 1000);
+        });
+      } else {
+        const client = new MongoClient(url, {
+          serverSelectionTimeoutMS: 5000,
+          connectTimeoutMS: 10000,
+        });
 
         try {
-          const db = client.db("hamstory");
-          const collection = db.collection<Category>("categories");
+          await client.connect();
 
-          const categories = await collection
-            .find({ blog_id: blogId })
-            .toArray();
+          try {
+            const db = client.db("hamstory");
+            const collection = db.collection<Category>("categories");
 
-          return categories;
-        } finally {
-          client.close();
+            const categories = await collection
+              .find({ blog_id: blogId })
+              .toArray();
+
+            return categories;
+          } finally {
+            client.close();
+          }
+        } catch (error) {
+          console.error("Error fetching blog categories:", error);
+          return [];
         }
-      } catch (error) {
-        console.error("Error fetching blog categories:", error);
-        return [];
       }
     },
     TAGS.categories.tags(blogId),

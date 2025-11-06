@@ -21,46 +21,58 @@ export async function updateUserNickname(userId: string, nickname: string) {
     };
   }
 
-  const client = new MongoClient(url, {
-    serverSelectionTimeoutMS: 5000,
-    connectTimeoutMS: 10000,
-  });
-
-  try {
-    await client.connect();
+  if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        revalidateTag("user");
+        return resolve({
+          success: true,
+          message: "닉네임 수정에 성공했습니다.",
+        });
+      }, 1000);
+    });
+  } else {
+    const client = new MongoClient(url, {
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 10000,
+    });
 
     try {
-      const db = client.db("hamstory");
+      await client.connect();
 
-      const usersCollection = db.collection<User>("users");
+      try {
+        const db = client.db("hamstory");
 
-      const result = await usersCollection.updateOne(
-        { _id: userId },
-        { $set: { nickname } },
-      );
+        const usersCollection = db.collection<User>("users");
 
-      if (result.acknowledged) {
-        // 사용자 프로필 캐시 무효화
-        revalidateTag("user");
-        return { success: true, message: "닉네임 수정에 성공했습니다." };
-      } else {
+        const result = await usersCollection.updateOne(
+          { _id: userId },
+          { $set: { nickname } },
+        );
+
+        if (result.acknowledged) {
+          // 사용자 프로필 캐시 무효화
+          revalidateTag("user");
+          return { success: true, message: "닉네임 수정에 성공했습니다." };
+        } else {
+          return { success: false, message: "닉네임 수정에 실패했습니다." };
+        }
+      } catch (e) {
+        console.error("Update nickname error:", e);
         return { success: false, message: "닉네임 수정에 실패했습니다." };
+      } finally {
+        await client.close();
       }
-    } catch (e) {
-      console.error("Update nickname error:", e);
-      return { success: false, message: "닉네임 수정에 실패했습니다." };
-    } finally {
-      await client.close();
+    } catch (error) {
+      console.error("Database connection error:", error);
+      return {
+        success: false,
+        message:
+          error instanceof Error && error.message.includes("timeout")
+            ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
+            : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
+      };
     }
-  } catch (error) {
-    console.error("Database connection error:", error);
-    return {
-      success: false,
-      message:
-        error instanceof Error && error.message.includes("timeout")
-          ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
-          : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
-    };
   }
 }
 
@@ -79,45 +91,57 @@ export async function updateUserEmail(userId: string, email: string) {
     };
   }
 
-  const client = new MongoClient(url, {
-    serverSelectionTimeoutMS: 5000,
-    connectTimeoutMS: 10000,
-  });
-
-  try {
-    await client.connect();
+  if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        revalidateTag("user");
+        return resolve({
+          success: true,
+          message: "이메일 수정에 성공했습니다.",
+        });
+      }, 1000);
+    });
+  } else {
+    const client = new MongoClient(url, {
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 10000,
+    });
 
     try {
-      const db = client.db("hamstory");
+      await client.connect();
 
-      const usersCollection = db.collection<User>("users");
+      try {
+        const db = client.db("hamstory");
 
-      const result = await usersCollection.updateOne(
-        { _id: userId },
-        { $set: { email } },
-      );
+        const usersCollection = db.collection<User>("users");
 
-      if (result.acknowledged) {
-        // 사용자 프로필 캐시 무효화
-        revalidateTag("user");
-        return { success: true, message: "이메일 수정에 성공했습니다." };
-      } else {
+        const result = await usersCollection.updateOne(
+          { _id: userId },
+          { $set: { email } },
+        );
+
+        if (result.acknowledged) {
+          // 사용자 프로필 캐시 무효화
+          revalidateTag("user");
+          return { success: true, message: "이메일 수정에 성공했습니다." };
+        } else {
+          return { success: false, message: "이메일 수정에 실패했습니다." };
+        }
+      } catch (e) {
+        console.error("Update email error:", e);
         return { success: false, message: "이메일 수정에 실패했습니다." };
+      } finally {
+        await client.close();
       }
-    } catch (e) {
-      console.error("Update email error:", e);
-      return { success: false, message: "이메일 수정에 실패했습니다." };
-    } finally {
-      await client.close();
+    } catch (error) {
+      console.error("Database connection error:", error);
+      return {
+        success: false,
+        message:
+          error instanceof Error && error.message.includes("timeout")
+            ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
+            : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
+      };
     }
-  } catch (error) {
-    console.error("Database connection error:", error);
-    return {
-      success: false,
-      message:
-        error instanceof Error && error.message.includes("timeout")
-          ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
-          : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
-    };
   }
 }

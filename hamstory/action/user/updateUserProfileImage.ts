@@ -24,46 +24,61 @@ export async function uploadImageToCloudinary(file: File): Promise<{
     url: string;
   } | null;
 }> {
-  try {
-    // File을 ArrayBuffer로 변환
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    // Cloudinary에 이미지 업로드
-    const result = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream(
-          {
-            resource_type: "image",
-            folder: "hamstory/profiles", // 폴더 구조 설정
-            transformation: [
-              { width: 300, height: 300, crop: "fill", gravity: "face" }, // 프로필 이미지 최적화
-              { quality: "auto", fetch_format: "auto" },
-            ],
+  if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        return resolve({
+          success: true,
+          message: "프로필 이미지 업로드 성공",
+          data: {
+            publicId: "public_id",
+            url: "url",
           },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          },
-        )
-        .end(buffer);
+        });
+      }, 1000);
     });
+  } else {
+    try {
+      // File을 ArrayBuffer로 변환
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
 
-    return {
-      success: true,
-      message: "프로필 이미지 업로드 성공",
-      data: {
-        publicId: (result as any).public_id,
-        url: (result as any).secure_url,
-      },
-    };
-  } catch (error) {
-    console.error("Cloudinary 업로드 에러:", error);
-    return {
-      success: false,
-      message: "프로필 이미지 업로드 실패",
-      data: null,
-    };
+      // Cloudinary에 이미지 업로드
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              resource_type: "image",
+              folder: "hamstory/profiles", // 폴더 구조 설정
+              transformation: [
+                { width: 300, height: 300, crop: "fill", gravity: "face" }, // 프로필 이미지 최적화
+                { quality: "auto", fetch_format: "auto" },
+              ],
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            },
+          )
+          .end(buffer);
+      });
+
+      return {
+        success: true,
+        message: "프로필 이미지 업로드 성공",
+        data: {
+          publicId: (result as any).public_id,
+          url: (result as any).secure_url,
+        },
+      };
+    } catch (error) {
+      console.error("Cloudinary 업로드 에러:", error);
+      return {
+        success: false,
+        message: "프로필 이미지 업로드 실패",
+        data: null,
+      };
+    }
   }
 }
 
@@ -77,57 +92,70 @@ export async function updateUserProfileImage(
   message: string;
   data: string | object | null;
 }> {
-  const client = new MongoClient(url, {
-    serverSelectionTimeoutMS: 5000,
-    connectTimeoutMS: 10000,
-  });
-
-  try {
-    await client.connect();
+  if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        revalidateTag("user");
+        return resolve({
+          success: true,
+          message: "프로필 이미지 업데이트 성공",
+          data: null,
+        });
+      }, 1000);
+    });
+  } else {
+    const client = new MongoClient(url, {
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 10000,
+    });
 
     try {
-      const db = client.db("hamstory");
+      await client.connect();
 
-      const usersCollection = db.collection<User>("users");
+      try {
+        const db = client.db("hamstory");
 
-      await usersCollection.updateOne(
-        { _id: userId },
-        {
-          $set: {
-            profile_image_url: imageUrl,
-            profile_image_public_id: publicId,
+        const usersCollection = db.collection<User>("users");
+
+        await usersCollection.updateOne(
+          { _id: userId },
+          {
+            $set: {
+              profile_image_url: imageUrl,
+              profile_image_public_id: publicId,
+            },
           },
-        },
-      );
+        );
 
-      // 사용자 프로필 캐시 무효화
-      revalidateTag("user");
+        // 사용자 프로필 캐시 무효화
+        revalidateTag("user");
 
-      return {
-        success: true,
-        message: "프로필 이미지 업데이트 성공",
-        data: null,
-      };
-    } catch (e) {
-      console.error("Update profile image error:", e);
+        return {
+          success: true,
+          message: "프로필 이미지 업데이트 성공",
+          data: null,
+        };
+      } catch (e) {
+        console.error("Update profile image error:", e);
+        return {
+          success: false,
+          message: "프로필 이미지 업데이트 실패",
+          data: null,
+        };
+      } finally {
+        client.close();
+      }
+    } catch (error) {
+      console.error("Database connection error:", error);
       return {
         success: false,
-        message: "프로필 이미지 업데이트 실패",
+        message:
+          error instanceof Error && error.message.includes("timeout")
+            ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
+            : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
         data: null,
       };
-    } finally {
-      client.close();
     }
-  } catch (error) {
-    console.error("Database connection error:", error);
-    return {
-      success: false,
-      message:
-        error instanceof Error && error.message.includes("timeout")
-          ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
-          : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
-      data: null,
-    };
   }
 }
 
