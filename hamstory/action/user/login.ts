@@ -4,6 +4,8 @@ import { createAuthSession } from "@/lib/user/auth";
 import { verifyPassword } from "@/lib/user/hash";
 import { MongoClient } from "mongodb";
 
+import { ServerResponseType } from "@/types/serverResponse";
+
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 export default async function login(
@@ -13,10 +15,10 @@ export default async function login(
     data: string | object | null;
   },
   formData: FormData,
-): Promise<{
-  success: boolean;
-  message: string;
-  data: string | object | null;
+): ServerResponseType<{
+  _id: string;
+  nickname: string;
+  email: string;
 }> {
   const email = formData.get("email");
   const password = formData.get("password");
@@ -38,9 +40,11 @@ export default async function login(
             message: "로그인에 성공했습니다.",
             data: {
               _id: "user1",
+              nickname: "test",
+              email: "test@test.com",
             },
           }),
-        1000,
+        5000,
       );
     });
   } else {
@@ -83,13 +87,13 @@ export default async function login(
 
         /* 클라이언트로 전달할 사용자 정보 (비밀번호 제외) */
         const userForClient = {
-          _id: user._id,
-          nickname: user.nickname,
-          email: user.email,
+          _id: String(user._id),
+          nickname: user.nickname as string,
+          email: user.email as string,
           // password는 클라이언트로 전달하지 않음
         };
 
-        await createAuthSession(user._id as any); // 로그인 성공했으니까 클라이언트 요청 시 헤더에 세션 쿠키 추가
+        await createAuthSession(userForClient._id); // 로그인 성공했으니까 클라이언트 요청 시 헤더에 세션 쿠키 추가
 
         return {
           success: true,

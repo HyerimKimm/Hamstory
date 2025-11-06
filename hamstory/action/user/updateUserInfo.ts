@@ -5,6 +5,7 @@ import { revalidateTag } from "next/cache";
 import { MongoClient } from "mongodb";
 
 import { User } from "@/types/collection";
+import { ServerResponseType } from "@/types/serverResponse";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
@@ -12,18 +13,20 @@ const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 export async function updateUserNickname(
   userId: string,
   nickname: string,
-): Promise<{
-  success: boolean;
-  message: string;
-}> {
+): ServerResponseType<null> {
   if (!userId) {
-    return { success: false, message: "유저 정보를 찾을 수 없습니다." };
+    return {
+      success: false,
+      message: "유저 정보를 찾을 수 없습니다.",
+      data: null,
+    };
   }
 
   if (!nickname || nickname.length < 2 || nickname.length > 10) {
     return {
       success: false,
       message: "닉네임은 2자 이상 10자 이하로 입력해 주세요.",
+      data: null,
     };
   }
 
@@ -34,6 +37,7 @@ export async function updateUserNickname(
         return resolve({
           success: true,
           message: "닉네임 수정에 성공했습니다.",
+          data: null,
         });
       }, 1000);
     });
@@ -59,13 +63,25 @@ export async function updateUserNickname(
         if (result.acknowledged) {
           // 사용자 프로필 캐시 무효화
           revalidateTag("user");
-          return { success: true, message: "닉네임 수정에 성공했습니다." };
+          return {
+            success: true,
+            message: "닉네임 수정에 성공했습니다.",
+            data: null,
+          };
         } else {
-          return { success: false, message: "닉네임 수정에 실패했습니다." };
+          return {
+            success: false,
+            message: "닉네임 수정에 실패했습니다.",
+            data: null,
+          };
         }
       } catch (e) {
         console.error("Update nickname error:", e);
-        return { success: false, message: "닉네임 수정에 실패했습니다." };
+        return {
+          success: false,
+          message: "닉네임 수정에 실패했습니다.",
+          data: null,
+        };
       } finally {
         await client.close();
       }
@@ -77,6 +93,7 @@ export async function updateUserNickname(
           error instanceof Error && error.message.includes("timeout")
             ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
             : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
+        data: null,
       };
     }
   }
@@ -88,18 +105,20 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export async function updateUserEmail(
   userId: string,
   email: string,
-): Promise<{
-  success: boolean;
-  message: string;
-}> {
+): ServerResponseType<null> {
   if (!userId) {
-    return { success: false, message: "유저 정보를 찾을 수 없습니다." };
+    return {
+      success: false,
+      message: "유저 정보를 찾을 수 없습니다.",
+      data: null,
+    };
   }
 
   if (!email || !emailRegex.test(email)) {
     return {
       success: false,
       message: "이메일 형식이 올바르지 않습니다.",
+      data: null,
     };
   }
 
@@ -110,6 +129,7 @@ export async function updateUserEmail(
         return resolve({
           success: true,
           message: "이메일 수정에 성공했습니다.",
+          data: null,
         });
       }, 1000);
     });
@@ -135,13 +155,25 @@ export async function updateUserEmail(
         if (result.acknowledged) {
           // 사용자 프로필 캐시 무효화
           revalidateTag("user");
-          return { success: true, message: "이메일 수정에 성공했습니다." };
+          return {
+            success: true,
+            message: "이메일 수정에 성공했습니다.",
+            data: null,
+          };
         } else {
-          return { success: false, message: "이메일 수정에 실패했습니다." };
+          return {
+            success: false,
+            message: "이메일 수정에 실패했습니다.",
+            data: null,
+          };
         }
       } catch (e) {
         console.error("Update email error:", e);
-        return { success: false, message: "이메일 수정에 실패했습니다." };
+        return {
+          success: false,
+          message: "이메일 수정에 실패했습니다.",
+          data: null,
+        };
       } finally {
         await client.close();
       }
@@ -153,6 +185,7 @@ export async function updateUserEmail(
           error instanceof Error && error.message.includes("timeout")
             ? "데이터베이스 연결 시간이 초과되었습니다. 잠시 후 다시 시도해주세요."
             : "데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.",
+        data: null,
       };
     }
   }

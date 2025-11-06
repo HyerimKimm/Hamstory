@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { MongoClient, ObjectId } from "mongodb";
 
 import { Blog, User } from "@/types/collection";
+import { ServerResponseType } from "@/types/serverResponse";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
@@ -15,10 +16,9 @@ export default async function signup(
     data: string | object | null;
   },
   formData: FormData,
-): Promise<{
-  success: boolean;
-  message: string;
-  data: string | object | null;
+): ServerResponseType<{
+  acknowledged: boolean;
+  insertedId: string;
 }> {
   if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
     return new Promise((resolve) => {

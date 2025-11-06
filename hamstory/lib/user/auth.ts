@@ -4,6 +4,8 @@ import { MongodbAdapter } from "@lucia-auth/adapter-mongodb";
 import { Lucia, Session, User } from "lucia";
 import { MongoClient } from "mongodb";
 
+import { ServerResponseType } from "@/types/serverResponse";
+
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 // Lucia를 위한 전용 클라이언트 (어댑터용)
@@ -13,7 +15,10 @@ let adapter: MongodbAdapter | null = null;
 let luciaInstance: Lucia<MongodbAdapter> | null = null;
 
 // MongoDB 연결 및 어댑터 초기화 함수
-async function initializeAdapter() {
+async function initializeAdapter(): Promise<{
+  adapter: MongodbAdapter | null;
+  lucia: Lucia<MongodbAdapter> | null;
+}> {
   if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
     return new Promise((resolve) => {
       setTimeout(() => resolve({ adapter: null, lucia: null }), 1000);
@@ -60,7 +65,7 @@ async function initializeAdapter() {
 }
 
 // Lucia 인스턴스 가져오기 (lazy initialization)
-async function getLucia() {
+async function getLucia(): Promise<Lucia<MongodbAdapter>> {
   if (!luciaInstance) {
     await initializeAdapter();
   }
@@ -128,36 +133,32 @@ export async function createAuthSession(userId: string) {
   3. 세션 검증 성공 시 세션 쿠키 기간 연장
   4. 세션 검증 실패 시 세션 쿠키 삭제
 */
-export async function verifyAuth(): Promise<{
-  success: boolean;
-  message: string;
-  data: {
-    user: User;
-    session: Session;
-  } | null;
+export async function verifyAuth(): ServerResponseType<{
+  user: User;
+  session: Session;
 }> {
   if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
     return new Promise((resolve) => {
       setTimeout(
         () =>
+          // resolve({
+          //   success: true,
+          //   message: "세션 검증 성공",
+          //   data: {
+          //     user: { id: "user1" },
+          //     session: {
+          //       id: "session1",
+          //       expiresAt: new Date(),
+          //       fresh: true,
+          //       userId: "user1",
+          //     },
+          //   },
+          // }),
           resolve({
-            success: true,
-            message: "세션 검증 성공",
-            data: {
-              user: { id: "user1" },
-              session: {
-                id: "session1",
-                expiresAt: new Date(),
-                fresh: true,
-                userId: "user1",
-              },
-            },
+            success: false,
+            message: "세션 검증 실패",
+            data: null,
           }),
-        // resolve({
-        //   success: false,
-        //   message: "세션 검증 실패",
-        //   data: null,
-        // }),
         1000,
       );
     });
@@ -253,11 +254,7 @@ export async function verifyAuth(): Promise<{
 }
 
 /* 세션 삭제 함수 */
-export async function destroyAuthSession(): Promise<{
-  success: boolean;
-  message: string;
-  data: null;
-}> {
+export async function destroyAuthSession(): ServerResponseType<null> {
   const result = await verifyAuth();
 
   if (!result.success || !result.data || !result.data.session) {

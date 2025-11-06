@@ -6,6 +6,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { MongoClient } from "mongodb";
 
 import { User } from "@/types/collection";
+import { ServerResponseType } from "@/types/serverResponse";
 
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
@@ -16,13 +17,9 @@ cloudinary.config({
 });
 
 // 프로필이미지를 Cloudinary에 업로드
-export async function uploadImageToCloudinary(file: File): Promise<{
-  success: boolean;
-  message: string;
-  data: {
-    publicId: string;
-    url: string;
-  } | null;
+export async function uploadImageToCloudinary(file: File): ServerResponseType<{
+  publicId: string;
+  url: string;
 }> {
   if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
     return new Promise((resolve) => {
@@ -87,11 +84,7 @@ export async function updateUserProfileImage(
   userId: string,
   publicId: string,
   imageUrl: string,
-): Promise<{
-  success: boolean;
-  message: string;
-  data: string | object | null;
-}> {
+): ServerResponseType<null> {
   if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -160,11 +153,9 @@ export async function updateUserProfileImage(
 }
 
 // 프로필이미지를 Cloudinary에서 삭제
-export async function deleteCloudinaryImage(public_id: string): Promise<{
-  success: boolean;
-  message: string;
-  data: null;
-}> {
+export async function deleteCloudinaryImage(
+  public_id: string,
+): ServerResponseType<null> {
   try {
     const result = await cloudinary.uploader.destroy(public_id);
 

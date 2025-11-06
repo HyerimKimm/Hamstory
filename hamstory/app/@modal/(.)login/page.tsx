@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 import ModalHeader from "@/components/modal/ModalHeader";
 import ModalLayout from "@/components/modal/ModalLayout";
 
+import LoadingIndicator from "@/assets/images/icons/LoadingIndicator";
+
 import styles from "./page.module.scss";
 
 export default function LoginModal() {
@@ -86,7 +88,11 @@ export default function LoginModal() {
           className={styles.submit_button}
           disabled={pending}
         >
-          {pending ? "로그인 중..." : "로그인"}
+          {pending ? (
+            <LoadingIndicator width={16} height={16} color="white" />
+          ) : (
+            "로그인"
+          )}
         </button>
         <div className={styles.signup_link_wrap}>
           <span className={styles.signup_link_text}>회원이 아니신가요?</span>
