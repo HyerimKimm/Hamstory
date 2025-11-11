@@ -1,9 +1,11 @@
 import Image from "next/image";
 
-import { getUserBlog } from "@/action/blog/getUserBlog";
+import { getBlogCategory, getUserBlog } from "@/action/blog/getUserBlog";
 import { getUserProfile } from "@/action/user/getUserProfile";
 
 import defaultProfileImage from "@/assets/images/icons/profile_default_darkmode.svg";
+
+import { Category } from "@/types/collection";
 
 import styles from "./page.module.scss";
 
@@ -17,6 +19,7 @@ export default async function PostListPage({
 
   const userInfo = await getUserProfile(userId);
   const blogInfo = await getUserBlog(userId);
+  const categories = await getBlogCategory(blogInfo?._id || "");
 
   return (
     <main className={styles.page_wrap}>
@@ -37,6 +40,17 @@ export default async function PostListPage({
           <span className={styles.nickname}>{userInfo?.nickname}</span>
           <span className={styles.email}>{userInfo?.email}</span>
         </div>
+      </section>
+
+      <section className={styles.category_list_wrap}>
+        <label htmlFor="category">카테고리</label>
+        <ul className={styles.category_list}>
+          {categories.map((category: Category) => (
+            <li key={category._id} className={styles.category_item}>
+              <span className={styles.category_name}>{category.name}</span>
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   );
