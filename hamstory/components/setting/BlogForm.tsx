@@ -2,10 +2,12 @@
 
 import { addBlogCategory } from "@/action/blog/addBlogCategory";
 import { deleteBlogCategory } from "@/action/blog/deleteBlogCategory";
+import { useState } from "react";
 
 import AddIcon from "@/assets/images/icons/AddIcon";
 import DeleteIcon from "@/assets/images/icons/DeleteIcon";
 import DnDIcon from "@/assets/images/icons/DnDIcon";
+import LoadingIndicator from "@/assets/images/icons/LoadingIndicator";
 import PencilIcon from "@/assets/images/icons/PencilIcon";
 
 import { Category } from "@/types/collection";
@@ -23,6 +25,24 @@ export default function BlogForm({
     categories: Category[];
   };
 }) {
+  const [title, setTitle] = useState(initialData.title);
+  const [description, setDescription] = useState(initialData.description);
+
+  const [isTitleLoading, setIsTitleLoading] = useState(false);
+  const [isDescriptionLoading, setIsDescriptionLoading] = useState(false);
+
+  async function handleTitleUpdate() {
+    setIsTitleLoading(true);
+    /* Todo : 블로그 제목 수정 액션 추가 */
+    setIsTitleLoading(false);
+  }
+
+  async function handleDescriptionUpdate() {
+    setIsDescriptionLoading(true);
+    /* Todo : 블로그 설명 수정 액션 추가 */
+    setIsDescriptionLoading(false);
+  }
+
   return (
     <form className={styles.form_wrap}>
       {/* 블로그 제목 */}
@@ -32,10 +52,19 @@ export default function BlogForm({
           <input
             type="text"
             name="title"
-            defaultValue={initialData.title || ""}
+            defaultValue={initialData.title}
             className={styles.input}
+            onChange={(e) => setTitle(e.target.value)}
           />
-          <button type="button" className={styles.main_bg_button}>
+          <button
+            type="button"
+            className={styles.main_bg_button}
+            onClick={handleTitleUpdate}
+            disabled={isTitleLoading}
+          >
+            {isTitleLoading && (
+              <LoadingIndicator width={24} height={24} color="white" />
+            )}
             수정
           </button>
         </div>
@@ -46,10 +75,15 @@ export default function BlogForm({
         <div className={styles.info}>
           <textarea
             name="description"
-            defaultValue={initialData.description || ""}
+            defaultValue={initialData.description}
+            onChange={(e) => setDescription(e.target.value)}
             className={styles.textarea}
           />
-          <button type="button" className={styles.main_bg_button}>
+          <button
+            type="button"
+            className={styles.main_bg_button}
+            onClick={handleDescriptionUpdate}
+          >
             수정
           </button>
         </div>
