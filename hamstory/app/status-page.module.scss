@@ -4,12 +4,6 @@
 .page_wrap {
   width: 100vw;
   height: calc(100vh - variables.$headerHeight);
-  @include mixin.flex(column, flex-start, center, 20px, null);
-}
-
-.loading_page_wrap {
-  width: 100%;
-  height: 100%;
   @include mixin.flex(column, center, center, 20px, null);
 }
 

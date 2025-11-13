@@ -1,25 +1,2 @@
 @use "variables";
 @use "mixin";
-
-.header {
-  @include mixin.flex(row, space-between, center, null, null);
-  width: 100%;
-  height: 60px;
-  padding: 0 20px;
-}
-
-.header_logo {
-  @include mixin.flex(row, flex-start, center, null, null);
-}
-
-.header_logo_img {
-  width: 40px;
-  height: auto;
-}
-
-.header_title {
-  font-family: variables.$logoFont;
-  > .brand {
-    color: variables.$brand01;
-  }
-}

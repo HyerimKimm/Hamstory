@@ -1,3 +1,5 @@
+import styles from "./status-page.module.scss";
+
 export default function NotFoundPage() {
-  return <div>Not Found Page dkssud</div>;
+  return <main className={styles.page_wrap}>Not Found Page.</main>;
 }

@@ -1,9 +1,13 @@
 import LoadingIndicator from "@/assets/images/icons/LoadingIndicator";
 
-export default function LoadingPage() {
+import styles from "./layout.module.scss";
+
+export default function SettingsLoadingPage() {
   return (
-    <div>
-      <LoadingIndicator width={40} height={40} />
-    </div>
+    <main className={styles.loading_page_wrap}>
+      <span className={styles.loading_indicator_wrap}>
+        <LoadingIndicator width={45} height={45} />
+      </span>
+    </main>
   );
 }
