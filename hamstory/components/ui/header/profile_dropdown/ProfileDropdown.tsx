@@ -34,6 +34,38 @@ export default function ProfileDropdown({ userInfo }: { userInfo: User }) {
     }
   }
 
+  const MENU_LIST: {
+    label: string;
+    component: "link" | "button";
+    href: string;
+    onClick: () => void;
+  }[] = [
+    {
+      label: "내 블로그",
+      component: "link",
+      href: `/${userInfo._id}/posts`,
+      onClick: () => setIsOpen(false),
+    },
+    {
+      label: "새 글 작성",
+      component: "link",
+      href: "/write",
+      onClick: () => setIsOpen(false),
+    },
+    {
+      label: "설정",
+      component: "link",
+      href: "/settings/user",
+      onClick: () => setIsOpen(false),
+    },
+    {
+      label: "로그아웃",
+      component: "button",
+      onClick: handleLogout,
+      href: "",
+    },
+  ];
+
   // 클릭 외부 영역 감지
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -76,31 +108,38 @@ export default function ProfileDropdown({ userInfo }: { userInfo: User }) {
         {isOpen && (
           <motion.div
             initial={{ height: 0 }}
-            animate={{ height: 100 }}
+            animate={{ height: 132 }}
             exit={{ height: 0 }}
             transition={{ duration: 0.15 }}
             className={styles.header_profile_dropdown_content}
           >
-            <Link
-              className={styles.header_profile_dropdown_content_item}
-              href={`/${userInfo._id}/posts`}
-              onClick={() => setIsOpen(false)}
-            >
-              내 블로그
-            </Link>
-            <Link
-              className={styles.header_profile_dropdown_content_item}
-              href="/settings/user"
-              onClick={() => setIsOpen(false)}
-            >
-              설정
-            </Link>
-            <button
-              className={styles.header_profile_dropdown_content_item}
-              onClick={handleLogout}
-            >
-              로그아웃
-            </button>
+            {MENU_LIST.map((menu, index) => {
+              switch (menu.component) {
+                case "link":
+                  return (
+                    <Link
+                      key={index}
+                      className={styles.header_profile_dropdown_content_item}
+                      href={menu.href}
+                      onClick={menu.onClick}
+                    >
+                      {menu.label}
+                    </Link>
+                  );
+                case "button":
+                  return (
+                    <button
+                      key={index}
+                      className={styles.header_profile_dropdown_content_item}
+                      onClick={menu.onClick}
+                    >
+                      {menu.label}
+                    </button>
+                  );
+                default:
+                  return null;
+              }
+            })}
           </motion.div>
         )}
       </AnimatePresence>
