@@ -23,11 +23,13 @@ export default async function PostListPage({
 
   return (
     <main className={styles.page_wrap}>
+      {/* 블로그 제목, 설명 */}
       <section className={styles.blog_info_wrap}>
         <h1 className={styles.title}>{blogInfo?.title}</h1>
         <p className={styles.description}>{blogInfo?.description}</p>
       </section>
 
+      {/* 블로그 주인 프로필 정보 */}
       <section className={styles.profile_info_wrap}>
         <Image
           src={userInfo?.profile_image_url || defaultProfileImage}
@@ -42,15 +44,19 @@ export default async function PostListPage({
         </div>
       </section>
 
-      <section className={styles.category_list_wrap}>
-        <label htmlFor="category">카테고리</label>
-        <ul className={styles.category_list}>
-          {categories.map((category: Category) => (
-            <li key={category._id} className={styles.category_item}>
-              <span className={styles.category_name}>{category.name}</span>
-            </li>
-          ))}
-        </ul>
+      {/* 블로그 카테고리 목록 */}
+      <section className={styles.post_list_wrap}>
+        {/* 블로그 카테고리 목록 (테블릿, 모바일에서는 숨김) */}
+        <aside className={styles.aside_category_list_wrap}>
+          <h5 className={styles.aside_title}>카테고리</h5>
+          <ul className={styles.category_list}>
+            {categories.map((category: Category) => (
+              <li key={category._id} className={styles.category_item}>
+                <button type="button">{category.name}</button>
+              </li>
+            ))}
+          </ul>
+        </aside>
       </section>
     </main>
   );
