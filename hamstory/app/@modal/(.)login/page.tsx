@@ -8,8 +8,8 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "react-toastify";
 
-import ModalHeader from "@/components/modal/ModalHeader";
-import ModalLayout from "@/components/modal/ModalLayout";
+import ModalHeader from "@/components/ui/modal/ModalHeader";
+import ModalLayout from "@/components/ui/modal/ModalLayout";
 
 import LoadingIndicator from "@/assets/images/icons/LoadingIndicator";
 

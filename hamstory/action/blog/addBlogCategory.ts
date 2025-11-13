@@ -10,7 +10,7 @@ import { Category } from "@/types/collection";
 const url = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 export async function addBlogCategory(blogId: string, name: string) {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NEXT_PUBLIC_IS_MOCK === "true") {
     return new Promise((resolve) => {
       setTimeout(() => {
         revalidateTag("category");
@@ -31,6 +31,19 @@ export async function addBlogCategory(blogId: string, name: string) {
 
         const categoriesCollection = db.collection<Category>("categories");
 
+        // 같은 blog_id를 가진 카테고리들의 sort_order 최대값 찾기
+        const existingCategories = await categoriesCollection
+          .find({ blog_id: blogId })
+          .sort({ sort_order: -1 })
+          .limit(1)
+          .toArray();
+
+        const maxSortOrder =
+          existingCategories.length > 0 &&
+          existingCategories[0].sort_order !== undefined
+            ? existingCategories[0].sort_order
+            : -1;
+
         const categoryId = new ObjectId().toString();
 
         const result = await categoriesCollection.insertOne({
@@ -39,6 +52,7 @@ export async function addBlogCategory(blogId: string, name: string) {
           name: name,
           created_at: dayjs().format("YYYY-MM-DD HH:mm:ss"),
           updated_at: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+          sort_order: maxSortOrder + 1,
         });
 
         if (result.acknowledged) {

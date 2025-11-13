@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import Header from "@/components/header/Header";
-import ThemeProvider from "@/components/provider/ThemeProvider";
+import Header from "@/components/ui/header/Header";
+import ThemeProvider from "@/components/ui/provider/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Hamstory",

@@ -6,8 +6,8 @@ import signup from "@/action/user/signup";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
-import ModalHeader from "@/components/modal/ModalHeader";
-import ModalLayout from "@/components/modal/ModalLayout";
+import ModalHeader from "@/components/ui/modal/ModalHeader";
+import ModalLayout from "@/components/ui/modal/ModalLayout";
 
 import styles from "./page.module.scss";
 

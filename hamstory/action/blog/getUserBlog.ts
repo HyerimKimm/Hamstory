@@ -73,6 +73,15 @@ export async function getBlogCategory(blogId: string) {
                 name: "일상",
                 created_at: "2025-01-01 00:00:00",
                 updated_at: "2025-01-01 00:00:00",
+                sort_order: 0,
+              },
+              {
+                _id: "category2",
+                blog_id: "blog1",
+                name: "프로그래밍",
+                created_at: "2025-01-01 00:00:00",
+                updated_at: "2025-01-01 00:00:00",
+                sort_order: 1,
               },
             ]);
           }, 1000);
@@ -93,6 +102,7 @@ export async function getBlogCategory(blogId: string) {
             const categories = await collection
               .find({ blog_id: blogId })
               .toArray();
+            categories.sort((a, b) => a.sort_order - b.sort_order);
 
             return categories;
           } finally {
