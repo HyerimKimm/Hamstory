@@ -1,5 +1,3 @@
-import { headers } from "next/headers";
-
 import SettingTab from "@/components/setting/SettingTab";
 
 import styles from "./layout.module.scss";

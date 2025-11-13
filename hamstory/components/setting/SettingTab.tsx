@@ -15,12 +15,14 @@ export default function SettingTab() {
     <nav className={styles.tab_wrap}>
       <Link
         href="/settings/user"
+        prefetch={true}
         className={`${styles.tab_item} ${isUserPage ? styles.active : ""}`}
       >
         내 정보 관리
       </Link>
       <Link
         href="/settings/blog"
+        prefetch={true}
         className={`${styles.tab_item} ${isBlogPage ? styles.active : ""}`}
       >
         블로그 관리
