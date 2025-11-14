@@ -1,9 +1,12 @@
 @use "variables";
 @use "mixin";
 
-.page_wrap {
+.status_page_wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
-  height: calc(100vh - variables.$headerHeight);
+  height: 100vh;
   @include mixin.flex(column, center, center, 20px, null);
 }
 

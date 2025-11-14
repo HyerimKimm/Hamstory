@@ -141,24 +141,24 @@ export async function verifyAuth(): ServerResponseType<{
     return new Promise((resolve) => {
       setTimeout(
         () =>
+          // resolve({
+          //   success: true,
+          //   message: "세션 검증 성공",
+          //   data: {
+          //     user: { id: "user1" },
+          //     session: {
+          //       id: "session1",
+          //       expiresAt: new Date(),
+          //       fresh: true,
+          //       userId: "user1",
+          //     },
+          //   },
+          // }),
           resolve({
-            success: true,
-            message: "세션 검증 성공",
-            data: {
-              user: { id: "user1" },
-              session: {
-                id: "session1",
-                expiresAt: new Date(),
-                fresh: true,
-                userId: "user1",
-              },
-            },
+            success: false,
+            message: "세션 검증 실패",
+            data: null,
           }),
-        // resolve({
-        //   success: false,
-        //   message: "세션 검증 실패",
-        //   data: null,
-        // }),
         1000,
       );
     });
