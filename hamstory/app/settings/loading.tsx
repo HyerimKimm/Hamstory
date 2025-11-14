@@ -4,10 +4,10 @@ import styles from "./layout.module.scss";
 
 export default function SettingsLoadingPage() {
   return (
-    <main className={styles.loading_page_wrap}>
+    <div className={styles.loading_page_wrap}>
       <span className={styles.loading_indicator_wrap}>
         <LoadingIndicator width={45} height={45} />
       </span>
-    </main>
+    </div>
   );
 }

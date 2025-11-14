@@ -1,0 +1,19 @@
+@use "variables";
+@use "mixin";
+
+.status_page_wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  @include mixin.flex(column, center, center, 20px, null);
+}
+
+.loading_indicator_wrap {
+  @include mixin.flex(column, center, center, null, null);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
