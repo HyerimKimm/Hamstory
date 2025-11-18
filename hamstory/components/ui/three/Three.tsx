@@ -37,8 +37,8 @@ export default function Three() {
           enableZoom={true}
           enableRotate={true}
           enablePan={true}
-          minDistance={1}
-          maxDistance={50}
+          minDistance={0.1}
+          maxDistance={100}
         />
       </Suspense>
     </Canvas>

@@ -10,36 +10,6 @@ import React from "react";
 export function Model(props) {
   const { nodes, materials } = useGLTF("/pedal_board_ass_y.gltf", true);
 
-  // 디버깅: 모델 로딩 확인
-  React.useEffect(() => {
-    if (nodes && materials) {
-      console.log("✅ Model loaded successfully:", {
-        hasNodes: !!nodes,
-        hasMaterials: !!materials,
-        nodeCount: Object.keys(nodes).length,
-        materialCount: Object.keys(materials).length,
-      });
-
-      // 첫 번째 노드의 바운딩 박스 확인
-      const firstNode = Object.values(nodes)[0];
-      if (firstNode?.geometry) {
-        firstNode.geometry.computeBoundingBox();
-        const box = firstNode.geometry.boundingBox;
-        console.log("📦 First node bounding box:", {
-          min: box.min,
-          max: box.max,
-          size: box.max.clone().sub(box.min),
-        });
-      }
-    } else {
-      console.warn("⚠️ Nodes or materials not loaded yet");
-    }
-  }, [nodes, materials]);
-
-  if (!nodes || !materials) {
-    return null;
-  }
-
   return (
     <group {...props} dispose={null}>
       <OrthographicCamera
