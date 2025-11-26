@@ -5,7 +5,7 @@ import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 
-import { Model } from "./Pedal_board_ass_y";
+import { Model } from "@/utils/hamster/Scene";
 
 export default function Three() {
   return (
@@ -30,8 +30,6 @@ export default function Three() {
         <ambientLight intensity={2} />
         <directionalLight position={[5, 5, 5]} intensity={2} />
         <pointLight position={[10, 10, 10]} intensity={1} />
-        <gridHelper args={[10, 10]} />
-        <axesHelper args={[5]} />
         <Model scale={[3, 3, 3]} />
         <OrbitControls
           enableZoom={true}
