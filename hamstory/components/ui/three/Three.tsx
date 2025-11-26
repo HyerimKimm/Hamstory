@@ -15,8 +15,6 @@ export default function Three() {
         height: "700px",
         maxWidth: "100vw",
         maxHeight: "100vh",
-        // backgroundColor: "rgba(255,255,255,0.1)",
-        // borderRadius: "50%",
       }}
       camera={{
         aspect: 1,

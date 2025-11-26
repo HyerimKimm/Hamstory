@@ -2,6 +2,7 @@
 @use "mixin";
 
 .modal_overlay {
+  z-index: variables.$ziModal;
   position: fixed;
   top: 0;
   left: 0;
